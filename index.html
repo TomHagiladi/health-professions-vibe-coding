@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0F5257">
+  <meta name="description" content="וויב קודינג ככלי הערכה — מרחב בנייה למרצי הפקולטה למקצועות הבריאות, הקריה האקדמית אונו. בחרו מסלול, קבלו הצעות לאפליקציות הערכה ופרומפטים מוכנים להעתקה.">
+
+  <!-- Open Graph: link preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="he_IL">
+  <meta property="og:title" content="וויב קודינג ככלי הערכה — מקצועות הבריאות, אונו">
+  <meta property="og:description" content="בחרו את תחום הדעת שלכם, ערכו פרומפט מוכן והעתיקו אותו ל-Gemini Canvas או Google AI Studio כדי לבנות אפליקציית הערכה.">
+
+  <title>וויב קודינג ככלי הערכה · הפקולטה למקצועות הבריאות · אונו</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== Design tokens (shared with the heutagogy workshop site) ===== */
+    :root{
+      --cream:#FAF6EE;
+      --cream-2:#F2E9D9;
+      --surface:#FFFFFF;
+      --ink:#1E2B33;
+      --ink-soft:#46565E;
+      --teal:#0F5257;
+      --teal-700:#0A3D41;
+      --teal-50:#E4EFEF;
+      --coral:#C75B39;
+      --coral-700:#A8492C;
+      --sand:#E7D8C0;
+      --line:#E7DFD0;
+      --focus:#E0892A;
+      --radius:20px;
+      --radius-sm:12px;
+      --shadow-sm:0 1px 2px rgba(30,43,51,.06), 0 4px 14px rgba(30,43,51,.05);
+      --shadow-md:0 14px 40px rgba(15,82,87,.16), 0 4px 12px rgba(30,43,51,.08);
+      --maxw:1080px;
+    }
+
+    /* ===== Reset ===== */
+    *,*::before,*::after{box-sizing:border-box;}
+    html{-webkit-text-size-adjust:100%;}
+    body{
+      margin:0;
+      font-family:'Assistant','Segoe UI','Arial Hebrew',Arial,sans-serif;
+      background:var(--cream);
+      color:var(--ink);
+      line-height:1.7;
+      font-size:18px;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+    h1,h2,h3{line-height:1.25;margin:0;}
+    p{margin:0;}
+    button{font-family:inherit;}
+    [hidden]{display:none !important;}
+
+    /* English / Latin runs inside Hebrew */
+    .latin{font-family:inherit;direction:ltr;unicode-bidi:isolate;}
+
+    /* ===== Accessibility helpers ===== */
+    .sr-only{
+      position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+      overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+    }
+    .skip-link{
+      position:absolute;top:-100%;right:0;
+      background:var(--teal);color:#fff;padding:.75rem 1.5rem;
+      font-weight:700;z-index:300;text-decoration:none;border-radius:0 0 0 10px;
+    }
+    .skip-link:focus{top:0;outline:3px solid var(--focus);outline-offset:2px;}
+
+    a:focus-visible,button:focus-visible,[tabindex]:focus-visible,
+    input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{
+      outline:3px solid var(--focus);
+      outline-offset:3px;
+      border-radius:6px;
+    }
+
+    /* ===== Layout ===== */
+    .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(1rem,4vw,2.5rem);}
+
+    /* ===== Hero ===== */
+    .hero{
+      position:relative;overflow:hidden;
+      background:
+        radial-gradient(120% 90% at 88% -10%, rgba(199,91,57,.16), transparent 55%),
+        radial-gradient(120% 100% at 5% 0%, rgba(15,82,87,.18), transparent 52%),
+        linear-gradient(180deg,#0F5257 0%,#0C474B 100%);
+      color:#fff;
+      padding-block:clamp(2.6rem,7vw,4.6rem) clamp(3.2rem,8vw,5rem);
+    }
+    .hero::before{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background-image:
+        radial-gradient(circle at 92% 8%, rgba(255,255,255,.10) 0 1px, transparent 2px),
+        repeating-radial-gradient(circle at 92% 8%, transparent 0 38px, rgba(255,255,255,.05) 38px 39px);
+      opacity:.7;
+    }
+    .hero .wrap{position:relative;}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:.5ch;
+      font-weight:700;letter-spacing:.02em;font-size:.85rem;
+      color:#FBE9DF;background:rgba(199,91,57,.30);
+      border:1px solid rgba(255,255,255,.22);
+      padding:.35rem .9rem;border-radius:999px;margin-bottom:1.1rem;
+    }
+    .hero h1{
+      font-family:'Frank Ruhl Libre',Georgia,serif;font-weight:900;
+      font-size:clamp(1.9rem,5vw,3.1rem);letter-spacing:-.01em;max-width:20ch;
+    }
+    .hero .lead{margin-top:1.1rem;max-width:60ch;font-size:clamp(1.02rem,2.2vw,1.2rem);color:#EAF3F2;}
+    .hero .lead strong{color:#fff;}
+    .hero .subline{margin-top:.85rem;font-size:.98rem;color:#BFD8D6;}
+
+    /* wave divider */
+    .wave{display:block;width:100%;height:42px;margin-top:-1px;color:var(--cream);}
+    .wave svg{display:block;width:100%;height:100%;}
+
+    /* ===== Sections ===== */
+    main{padding-bottom:4rem;}
+    .section-head{margin-bottom:1.5rem;}
+    .section-head h2{
+      font-family:'Frank Ruhl Libre',Georgia,serif;
+      font-size:clamp(1.45rem,3.4vw,2rem);font-weight:700;color:var(--teal-700);
+      display:flex;align-items:center;gap:.6rem;
+    }
+    .section-head h2::before{content:"";width:.55rem;height:1.6rem;border-radius:3px;background:var(--coral);flex:none;}
+    .section-head .sub{margin-top:.5rem;color:var(--ink-soft);max-width:64ch;}
+
+    /* How-it-works card */
+    .howto{
+      background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+      box-shadow:var(--shadow-sm);padding:clamp(1.3rem,3vw,2rem);
+      margin-top:-2.2rem;position:relative;z-index:2;
+    }
+    .howto h2{font-family:'Frank Ruhl Libre',Georgia,serif;font-size:1.3rem;color:var(--teal-700);margin-bottom:.2rem;}
+    .steps{list-style:none;margin:1.1rem 0 0;padding:0;display:grid;gap:1rem;
+      grid-template-columns:repeat(auto-fit,minmax(215px,1fr));}
+    .steps li{display:flex;gap:.8rem;align-items:flex-start;}
+    .step-num{
+      flex:none;width:2.1rem;height:2.1rem;border-radius:50%;
+      background:var(--teal-50);color:var(--teal-700);font-weight:800;font-size:1rem;
+      display:grid;place-items:center;border:1.5px solid #CFE2E1;
+    }
+    .steps li p{font-size:.98rem;color:var(--ink);}
+    .steps em{font-style:normal;font-weight:800;color:var(--coral-700);}
+
+    /* ===== Cards grid (shared) ===== */
+    .menu{margin-top:3rem;}
+    .cards{display:grid;gap:1.2rem;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));}
+
+    /* Track card */
+    .track-card{
+      position:relative;text-align:right;cursor:pointer;
+      background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+      box-shadow:var(--shadow-sm);padding:1.5rem 1.5rem 1.35rem;
+      display:flex;flex-direction:column;gap:.5rem;width:100%;color:inherit;
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .track-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:#D9CDB6;}
+    .track-top{display:flex;align-items:center;gap:.85rem;}
+    .track-ico{
+      flex:none;width:3rem;height:3rem;border-radius:14px;
+      background:linear-gradient(150deg,var(--teal),#0B4145);color:#fff;
+      display:grid;place-items:center;box-shadow:0 4px 12px rgba(15,82,87,.28);
+    }
+    .track-ico svg{width:1.6rem;height:1.6rem;}
+    .track-degree{
+      font-size:.74rem;font-weight:700;color:var(--teal-700);
+      background:var(--teal-50);border:1px solid #D2E4E3;padding:.2rem .6rem;border-radius:999px;
+    }
+    .track-card h3{font-size:1.25rem;font-weight:800;color:var(--ink);}
+    .track-card .blurb{color:var(--ink-soft);font-size:.96rem;flex:1;}
+    .track-card .count{margin-top:.4rem;color:var(--teal);font-weight:700;font-size:.92rem;
+      display:inline-flex;align-items:center;gap:.4ch;}
+    .track-card .count svg{width:1em;height:1em;transition:transform .18s ease;}
+    .track-card:hover .count svg{transform:translateX(-4px);}
+
+    /* App card */
+    .app-card{
+      position:relative;text-align:right;cursor:pointer;
+      background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+      box-shadow:var(--shadow-sm);padding:1.4rem 1.5rem 1.25rem;
+      display:flex;flex-direction:column;gap:.55rem;width:100%;color:inherit;
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .app-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:#D9CDB6;}
+    .app-card h3{font-size:1.16rem;font-weight:800;color:var(--ink);}
+    .app-card .assesses{color:var(--ink-soft);font-size:.95rem;flex:1;}
+    .app-card .open-hint{margin-top:.3rem;color:var(--teal);font-weight:700;font-size:.93rem;
+      display:inline-flex;align-items:center;gap:.4ch;}
+    .app-card .open-hint svg{width:1em;height:1em;transition:transform .18s ease;}
+    .app-card:hover .open-hint svg{transform:translateX(-4px);}
+
+    /* Tool badge */
+    .tool-badge{
+      display:inline-flex;align-items:center;gap:.4ch;align-self:flex-start;
+      font-size:.74rem;font-weight:700;border-radius:999px;padding:.2rem .65rem;
+    }
+    .tool-badge.canvas{color:var(--teal-700);background:var(--teal-50);border:1px solid #D2E4E3;}
+    .tool-badge.aistudio{color:var(--coral-700);background:#FBEFE9;border:1px solid #F0D7CB;}
+
+    /* Track detail header */
+    .back-btn{
+      display:inline-flex;align-items:center;gap:.45ch;cursor:pointer;
+      background:var(--surface);border:1px solid var(--line);border-radius:999px;
+      color:var(--teal-700);font-weight:700;font-size:.95rem;padding:.5rem 1rem;
+      min-height:42px;margin-top:1.4rem;transition:background .15s ease;
+    }
+    .back-btn:hover{background:var(--cream-2);}
+    .back-btn svg{width:1.05em;height:1.05em;transform:scaleX(-1);}
+    .track-header{margin:1.3rem 0 .4rem;}
+    .track-header .th-top{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;}
+    .track-header h2{
+      font-family:'Frank Ruhl Libre',Georgia,serif;
+      font-size:clamp(1.6rem,4vw,2.3rem);font-weight:900;color:var(--teal-700);
+    }
+    .track-header .blurb{margin-top:.6rem;color:var(--ink-soft);max-width:64ch;}
+
+    /* ===== Modal ===== */
+    dialog{border:none;padding:0;background:transparent;width:min(780px,94vw);max-height:92dvh;color:var(--ink);margin:auto;}
+    dialog::backdrop{background:rgba(13,40,42,.55);backdrop-filter:blur(3px);}
+    .modal-panel{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow-md);
+      max-height:92dvh;display:flex;flex-direction:column;overflow:hidden;}
+    .modal-head{display:flex;align-items:flex-start;gap:1rem;padding:1.4rem 1.6rem;
+      border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--cream-2),var(--surface));}
+    .modal-head .mtitle-wrap{flex:1;min-width:0;}
+    .modal-head h2{font-size:1.28rem;font-weight:800;color:var(--ink);}
+    .modal-head .massess{margin-top:.3rem;color:var(--ink-soft);font-size:.96rem;}
+    .modal-close{margin-inline-start:auto;flex:none;width:2.6rem;height:2.6rem;border-radius:10px;cursor:pointer;
+      border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:1.4rem;line-height:1;
+      display:grid;place-items:center;transition:background .15s ease;}
+    .modal-close:hover{background:var(--cream-2);}
+    .modal-body{padding:1.4rem 1.6rem 1.7rem;overflow-y:auto;}
+
+    .reco{
+      display:flex;align-items:flex-start;gap:.6rem;
+      background:var(--teal-50);border:1px solid #D2E4E3;border-radius:var(--radius-sm);
+      padding:.85rem 1rem;margin-bottom:1.2rem;font-size:.95rem;color:var(--ink);
+    }
+    .reco svg{flex:none;width:1.2rem;height:1.2rem;color:var(--teal);margin-top:.15rem;}
+    .reco b{color:var(--teal-700);}
+
+    .prompt-label{display:block;font-weight:800;color:var(--teal-700);margin-bottom:.55rem;}
+    .prompt-input{
+      width:100%;display:block;font-family:'Assistant',sans-serif;font-size:1rem;line-height:1.65;
+      color:var(--ink);background:var(--cream);border:1.5px solid var(--line);border-radius:var(--radius-sm);
+      padding:1rem 1.1rem;resize:vertical;min-height:9rem;direction:rtl;
+    }
+    .prompt-input:focus{border-color:var(--teal);background:#fff;}
+    .prompt-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;margin-top:.7rem;}
+    .btn-copy{display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;
+      background:var(--teal);color:#fff;font-weight:700;font-size:1rem;border:none;border-radius:10px;
+      padding:.7rem 1.25rem;min-height:44px;transition:background .15s ease,transform .1s ease;}
+    .btn-copy:hover{background:var(--teal-700);}
+    .btn-copy:active{transform:scale(.97);}
+    .btn-copy.copied{background:#1F7A45;}
+    .btn-copy svg{width:1.15em;height:1.15em;flex:none;}
+    .reset-link{background:none;border:none;cursor:pointer;color:var(--ink-soft);font-size:.9rem;
+      text-decoration:underline;padding:.3rem;}
+    .reset-link:hover{color:var(--coral-700);}
+    .edit-hint{color:var(--ink-soft);font-size:.88rem;}
+
+    /* Advanced toggle */
+    .adv{margin-top:1.5rem;border-top:1px dashed var(--line);padding-top:1.3rem;}
+    .adv-toggle{display:flex;align-items:center;gap:.6rem;cursor:pointer;width:100%;text-align:right;
+      background:#FBEFE9;border:1px solid #F0D7CB;border-radius:var(--radius-sm);
+      padding:.8rem 1rem;color:var(--coral-700);font-weight:700;font-size:.98rem;}
+    .adv-toggle:hover{background:#F8E5DC;}
+    .adv-toggle .chev{margin-inline-start:auto;transition:transform .2s ease;width:1.1em;height:1.1em;flex:none;}
+    .adv-toggle[aria-expanded="true"] .chev{transform:rotate(180deg);}
+    .adv-toggle .ttl{display:flex;flex-direction:column;gap:.1rem;}
+    .adv-toggle .ttl small{font-weight:600;color:var(--ink-soft);font-size:.8rem;}
+    .adv-body{margin-top:1.1rem;}
+    .adv-note{background:var(--cream);border:1px solid var(--line);border-radius:10px;
+      padding:.8rem 1rem;font-size:.9rem;color:var(--ink-soft);margin-bottom:1rem;}
+    .adv-note b{color:var(--coral-700);}
+
+    /* Tool links + next steps */
+    .tool-links{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.5rem;}
+    .tool-link{display:inline-flex;align-items:center;gap:.5ch;text-decoration:none;font-weight:700;font-size:.96rem;
+      border-radius:10px;padding:.65rem 1.1rem;min-height:44px;border:1.5px solid var(--line);
+      color:var(--teal-700);background:var(--surface);transition:background .15s ease,border-color .15s ease;}
+    .tool-link:hover{background:var(--cream-2);border-color:#D9CDB6;}
+    .tool-link svg{width:1em;height:1em;}
+    .next-steps{margin-top:1.5rem;background:var(--teal-50);border:1px solid #D2E4E3;border-radius:var(--radius-sm);padding:1rem 1.2rem;}
+    .next-steps .glabel{font-weight:800;color:var(--teal-700);display:block;margin-bottom:.5rem;}
+    .next-steps ol{margin:0;padding-inline-start:1.3rem;}
+    .next-steps li{margin:.3rem 0;font-size:.95rem;}
+
+    /* Tool guidance accordion */
+    .guidance-section{margin-top:3rem;}
+    details.tool-guide{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+      box-shadow:var(--shadow-sm);padding:.4rem 1.4rem;margin-top:1rem;}
+    details.tool-guide summary{cursor:pointer;font-weight:800;color:var(--teal-700);font-size:1.1rem;
+      padding:1rem 0;list-style:none;display:flex;align-items:center;gap:.6rem;}
+    details.tool-guide summary::-webkit-details-marker{display:none;}
+    details.tool-guide summary .chev{margin-inline-start:auto;transition:transform .2s ease;width:1.1em;height:1.1em;}
+    details.tool-guide[open] summary .chev{transform:rotate(180deg);}
+    .guide-body{padding:0 0 1.2rem;color:var(--ink);}
+    .guide-body h4{color:var(--coral-700);margin:1rem 0 .3rem;font-size:1.02rem;}
+    .guide-body p{margin:.3rem 0;color:var(--ink-soft);}
+    .guide-body .pick{background:var(--teal-50);border-right:4px solid var(--teal);border-radius:10px;
+      padding:.8rem 1rem;margin-top:1rem;color:var(--ink);}
+
+    /* ===== Footer ===== */
+    footer{background:var(--teal-700);color:#EAF3F2;padding-block:3rem 2.5rem;margin-top:3rem;}
+    .closing{max-width:64ch;margin-inline:auto;text-align:center;font-size:1.1rem;color:#fff;}
+    .closing strong{color:#FBD9C9;}
+    .accessibility-statement{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);
+      border-radius:12px;padding:1.3rem 1.7rem;max-width:720px;margin:2rem auto 0;font-size:.9rem;color:#DCEAE9;}
+    .accessibility-statement h3{font-size:1.02rem;margin-bottom:.6rem;color:#fff;}
+    .accessibility-statement p{margin-bottom:.6rem;}
+    .accessibility-statement a{color:#FBD9C9;}
+    .credit{text-align:center;margin-top:2rem;font-size:.85rem;color:#9DBEBC;}
+
+    /* ===== Toast ===== */
+    .toast{position:fixed;inset-block-end:1.5rem;inset-inline:0;margin-inline:auto;width:max-content;max-width:90vw;
+      background:var(--ink);color:#fff;font-weight:700;padding:.8rem 1.4rem;border-radius:999px;box-shadow:var(--shadow-md);
+      display:flex;align-items:center;gap:.55rem;opacity:0;transform:translateY(12px);pointer-events:none;
+      transition:opacity .25s ease, transform .25s ease;z-index:400;}
+    .toast.show{opacity:1;transform:translateY(0);}
+    .toast svg{width:1.2em;height:1.2em;color:#6FE0A0;}
+
+    /* ===== Responsive ===== */
+    @media (max-width:768px){
+      body{font-size:17px;}
+      .howto{margin-top:-1.6rem;}
+      .modal-head{padding:1.1rem 1.1rem;}
+      .modal-body{padding:1.2rem 1.1rem 1.4rem;}
+    }
+    @media (max-width:480px){
+      dialog{width:94vw;max-height:94dvh;}
+      .modal-panel{max-height:94dvh;}
+    }
+    @media (prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;scroll-behavior:auto !important;}
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">דלג לתוכן הראשי</a>
+
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">מפגש 2 · מרחב בנייה למרצים</p>
+      <h1>וויב קודינג ככלי הערכה</h1>
+      <p class="lead">במקום לבקש מהסטודנטים עוד עבודה כתובה — אפשר <strong>לבנות אפליקציית הערכה אינטראקטיבית</strong> בשפה טבעית, בלי לדעת לתכנת. בחרו את תחום הדעת שלכם, קחו פרומפט מוכן, וצרו כלי שמעריך חשיבה ויישום — לא שינון.</p>
+      <p class="subline">הפקולטה למקצועות הבריאות · הקריה האקדמית אונו</p>
+    </div>
+  </header>
+  <div class="wave" aria-hidden="true">
+    <svg viewBox="0 0 1200 42" preserveAspectRatio="none" focusable="false"><path d="M0,20 C200,42 400,0 600,16 C800,32 1000,4 1200,22 L1200,42 L0,42 Z" fill="currentColor"></path></svg>
+  </div>
+
+  <main id="main-content">
+    <div class="wrap">
+
+      <!-- ===================== HOME VIEW ===================== -->
+      <section id="view-home">
+        <section class="howto" aria-labelledby="howto-heading">
+          <h2 id="howto-heading">איך זה עובד?</h2>
+          <ol class="steps">
+            <li><span class="step-num" aria-hidden="true">1</span><p>בחרו את <em>תחום הדעת</em> שלכם מתוך שמונת המסלולים.</p></li>
+            <li><span class="step-num" aria-hidden="true">2</span><p>בחרו הצעה לאפליקציה, וערכו את הפרומפט באתר — מלאו את הפרטים בסוגריים <span class="latin">[...]</span>.</p></li>
+            <li><span class="step-num" aria-hidden="true">3</span><p>העתיקו בלחיצה, פתחו את <span class="latin">Gemini Canvas</span> (או <span class="latin">Google AI Studio</span>) והדביקו.</p></li>
+            <li><span class="step-num" aria-hidden="true">4</span><p>דייקו את האפליקציה <em>בשיחה</em>, ושתפו את הקישור עם הסטודנטים.</p></li>
+          </ol>
+        </section>
+
+        <section class="menu" aria-labelledby="tracks-heading">
+          <div class="section-head">
+            <h2 id="tracks-heading">בחרו את תחום הדעת שלכם</h2>
+            <p class="sub">לכל מסלול הצענו 2–3 אפליקציות הערכה שמתאימות לסוג הידע הנדרש בו, עם פרומפט מוכן לכל אחת.</p>
+          </div>
+          <div class="cards" id="track-cards"></div>
+        </section>
+
+        <section class="guidance-section" aria-labelledby="guide-heading">
+          <div class="section-head">
+            <h2 id="guide-heading">מתי <span class="latin">Gemini Canvas</span> ומתי <span class="latin">Google AI Studio</span>?</h2>
+            <p class="sub">שני כלים חינמיים לבניית אפליקציות משפה טבעית. ההבדל המרכזי: האם אתם צריכים לראות את התוצרים של הסטודנטים במקום אחד.</p>
+          </div>
+          <details class="tool-guide">
+            <summary>פתחו להסבר קצר ולשאלת איסוף הנתונים <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+            <div class="guide-body">
+              <h4>Gemini Canvas — מהיר, בלי הקמה (ברירת המחדל שלנו)</h4>
+              <p>פותחים את <span class="latin">gemini.google.com</span>, לוחצים "<span class="latin">Canvas</span>", מדביקים פרומפט — ומקבלים אפליקציה חיה תוך שניות, עם קישור לשיתוף. מצוין ל<b>הערכה עצמית</b>: הסטודנט מתרגל, מקבל משוב מיידי, והאפליקציה מייצרת לו "סיכום" שהוא מגיש דרך <span class="latin">Moodle</span> או טופס. <b>החיסרון:</b> אין לוח בקרה מרכזי שמראה לכם מה כל הסטודנטים עשו, והנתונים בתוך האפליקציה שבירים.</p>
+              <h4>Google AI Studio + Firebase — כשרוצים לראות את כל ההגשות</h4>
+              <p>פותחים את <span class="latin">aistudio.google.com</span> במצב <span class="latin">Build</span>. אם תבקשו בפרומפט "סטודנטים מתחברים ושומרים תשובות", המערכת מקימה לבד מסד נתונים (<span class="latin">Firestore</span>) והתחברות עם חשבון <span class="latin">Google</span> — <b>ואתם רואים את כל ההגשות</b> בקונסול. בחינם: עד 2 אפליקציות פעילות. <b>המחיר:</b> צריך חשבון <span class="latin">Google</span>, צריך לבדוק שכללי-ההרשאה נכונים (אחרת סטודנט עלול לראות תשובות של אחר), ויש עקומת למידה.</p>
+              <div class="pick"><b>ההמלצה שלנו:</b> התחילו תמיד ב-<span class="latin">Canvas</span>. רוב אפליקציות ההערכה כלל לא צריכות איסוף מרכזי — הסטודנט מגיש את הסיכום בערוץ הקיים. עברו ל-<span class="latin">AI Studio</span> רק כשבאמת חשוב לכם לאסוף את כל התשובות במקום אחד (בכל כרטיס אפליקציה יש כפתור "גרסה מתקדמת" עם פרומפט מוכן לכך).</div>
+            </div>
+          </details>
+        </section>
+      </section>
+
+      <!-- ===================== TRACK VIEW ===================== -->
+      <section id="view-track" hidden aria-labelledby="track-title">
+        <button class="back-btn" id="back-btn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+          חזרה לכל המסלולים
+        </button>
+        <div class="track-header">
+          <div class="th-top">
+            <h2 id="track-title"></h2>
+            <span class="track-degree" id="track-degree"></span>
+          </div>
+          <p class="blurb" id="track-blurb"></p>
+        </div>
+        <div class="cards" id="app-cards" style="margin-top:1.4rem;"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p class="closing"><strong>הרעיון:</strong> לא להתחרות ב-<span class="latin">AI</span> על כתיבת טקסט — אלא לבנות הערכה שבודקת חשיבה, שיקול דעת ויישום קליני. כלי אחד קטן, ממוקד בתחום שלכם, יכול לעשות את ההבדל.</p>
+
+      <div class="accessibility-statement">
+        <h3>הצהרת נגישות</h3>
+        <p>אתר זה עומד בדרישות תקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), התשע"ג-2013, ותקן ישראלי ת"י 5568 המבוסס על הנחיות <span class="latin">WCAG 2.0</span> ברמה <span class="latin">AA</span>.</p>
+        <p>אם נתקלתם בבעיית נגישות, נשמח לסייע:</p>
+        <p><strong>רכז נגישות:</strong> <span class="latin">Tom Hagiladi</span><br>
+        <strong>אימייל:</strong> <a href="mailto:tomhagiladi@gmail.com">tomhagiladi@gmail.com</a></p>
+      </div>
+
+      <p class="credit">וויב קודינג ככלי הערכה · הפקולטה למקצועות הבריאות · הקריה האקדמית אונו</p>
+    </div>
+  </footer>
+
+  <!-- Reusable modal -->
+  <dialog id="modal" aria-labelledby="modal-title">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <div class="mtitle-wrap">
+          <h2 id="modal-title"></h2>
+          <p class="massess" id="modal-assess"></p>
+        </div>
+        <button class="modal-close" id="modal-close" aria-label="סגירת החלון" autofocus>&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script>
+  /* =========================================================
+     TRACKS DATA — generated & adversarially verified per
+     discipline. Replaced wholesale from the workflow output.
+     ========================================================= */
+  /* ===__TRACKS_DATA_START__=== */
+  const TRACKS = [
+  {
+    "id": "nursing",
+    "name": "סיעוד",
+    "degree": "תואר ראשון · B.S.N",
+    "blurb": "טיפול בחולים בכל גיל — חשיבה קלינית, חישוב תרופתי, תיעוד ובטיחות המטופל.",
+    "apps": [
+      {
+        "title": "סימולטור החלטה קלינית",
+        "assesses": "חשיבה קלינית, קבלת החלטות ותעדוף מול מקרה מתפתח — שיקול דעת ויישום, לא שינון.",
+        "tool": "canvas",
+        "toolWhy": "קנבס הוא הדרך הכי פשוטה — מדביקים את הבקשה ומקבלים אפליקציה עובדת בלי שום התקנה.",
+        "prompt": "אני מרצה לסיעוד בתואר ראשון, ואני רוצה לבנות אפליקציה שמתרגלת קבלת החלטות ותעדוף קליני מול מקרה מטופל שמתפתח לאורך כמה שלבים.\n\nלפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזה מקרה או נושא קליני להציג, באיזו רמת קושי, וכמה שלבים או החלטות שתרצה שיהיו. חכה לתשובות שלי, ורק אז בנה.\n\nהאפליקציה מציגה לסטודנט סיטואציה קלינית מתפתחת, ובכל שלב הוא בוחר מה לעשות ומה לתעדף קודם. המטרה לבחון חשיבה קלינית ושיקול דעת, לא שינון.\n\nאשמח שתהיה בעברית, נוחה לשימוש בנייד, ושתיתן משוב קצר ומנומק מיד אחרי כל בחירה. בסוף תציג לסטודנט סיכום קצר של הביצועים שלו עם כפתור 'העתק סיכום', כדי שיוכל להגיש לי אותו.",
+        "advancedPrompt": "אני מרצה לסיעוד ורוצה את אותה אפליקציה של סימולטור החלטה קלינית, ובנוסף משהו אנושי שיעזור לי מאוד: אני רוצה שהסטודנטים יתחברו עם חשבון Google לפני שהם מתחילים, ושאני אוכל לראות את כל ההגשות שלהם מרוכזות במקום אחד — מי תרגל, איזה החלטות בחר, ואיך הסתדר בכל שלב.\n\nאני לא מתכנת בכלל, אז לפני הבנייה שאל אותי כמה שאלות הבהרה קצרות כדי להבין בדיוק מה אני צריך, ואחר כך הדרך אותי צעד-אחר-צעד מה לעשות, בשפה פשוטה וברורה ובלי למהר."
+      },
+      {
+        "title": "מאמן חישובי מינון תרופתי",
+        "assesses": "דיוק בחישובי מינון ועירוי ויכולת לזהות מינון לא בטוח — יישום מקצועי ובטיחות מטופל.",
+        "tool": "canvas",
+        "toolWhy": "קנבס הכי פשוט — מעתיקים, מדביקים, ומיד יש מאמן תרגול עובד בלי התקנות.",
+        "prompt": "אני מרצה לסיעוד בתואר ראשון, ואני רוצה לבנות אפליקציה שמתרגלת חישובי מינון ועירוי תרופתי — בדיוק הסוג של חישובים שהסטודנטים צריכים לעשות נכון ובבטחה במחלקה.\n\nלפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, אילו סוגי חישובים להציג (מינון, טפטוף, עירוי), באיזו רמת קושי, וכמה תרגילים שתרצה. חכה לתשובות שלי, ורק אז בנה.\n\nבכל תרגיל הסטודנט מקבל מקרה קצר, מחשב את המינון או קצב העירוי הנכון, ומקבל מיד משוב אם צדק. חשוב לי שהאפליקציה תזהה ותסמן בבירור מינון לא בטוח, כי זה עניין של בטיחות מטופל.\n\nאשמח שתהיה בעברית, נוחה בנייד, עם משוב קצר ומיידי על כל תשובה. בסוף תציג לסטודנט סיכום קצר עם כפתור 'העתק סיכום' כדי שיגיש לי.",
+        "advancedPrompt": "אני מרצה לסיעוד ורוצה את אותה אפליקציה של מאמן חישובי מינון תרופתי, ובתוספת אנושית שתעזור לי מאוד: אני רוצה שהסטודנטים יתחברו עם חשבון Google לפני התרגול, ושאני אוכל לראות את כל ההגשות שלהם במקום אחד — מי תרגל, אילו תרגילים פתר, ואיפה טעה או חישב מינון לא בטוח.\n\nאני לא מתכנת בכלל, אז לפני הבנייה שאל אותי כמה שאלות הבהרה קצרות כדי להבין מה אני צריך, ואחר כך הדרך אותי צעד-אחר-צעד מה לעשות, בשפה פשוטה וברורה ובלי למהר."
+      },
+      {
+        "title": "בונה מסירת משמרת SBAR",
+        "assesses": "יכולת לתקשר מצב מטופל בצורה מובנית, ברורה ושלמה לפי SBAR — תקשורת קלינית בטוחה.",
+        "tool": "canvas",
+        "toolWhy": "קנבס הוא הכלי הכי פשוט — מדביקים את הבקשה ומקבלים אפליקציית תרגול מוכנה.",
+        "prompt": "אני מרצה לסיעוד בתואר ראשון, ואני רוצה לבנות אפליקציה שמתרגלת כתיבת מסירת משמרת מובנית ושלמה לפי המודל של SBAR.\n\nלפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזה מקרה מטופל להציג כבסיס לתרגול, באיזו רמת קושי, וכמה תרחישים שתרצה. חכה לתשובות שלי, ורק אז בנה.\n\nהאפליקציה נותנת לסטודנט מקרה מטופל, והוא כותב מסירת משמרת בארבעת החלקים של SBAR. המטרה לבחון אם המסירה ברורה, מסודרת ושלמה — בדיוק כמו שצריך כדי להעביר מטופל בבטחה. תן לו משוב קצר על כל חלק, ובמיוחד על מה שחסר או לא ברור.\n\nאשמח שתהיה בעברית, נוחה בנייד, עם משוב מיידי. בסוף תציג סיכום קצר עם כפתור 'העתק סיכום' כדי שיגיש לי.",
+        "advancedPrompt": "אני מרצה לסיעוד ורוצה את אותה אפליקציה של בונה מסירת משמרת SBAR, ובתוספת אנושית שתעזור לי מאוד: אני רוצה שהסטודנטים יתחברו עם חשבון Google לפני שהם כותבים, ושאני אוכל לראות את כל ההגשות שלהם במקום אחד — מי תרגל, מה כתב בכל חלק, ומה היה חסר.\n\nאני לא מתכנת בכלל, אז לפני הבנייה שאל אותי כמה שאלות הבהרה קצרות כדי להבין מה אני צריך, ואחר כך הדרך אותי צעד-אחר-צעד מה לעשות, בשפה פשוטה וברורה ובלי למהר."
+      }
+    ]
+  },
+  {
+    "id": "communication-disorders",
+    "name": "הפרעות בתקשורת",
+    "degree": "תואר ראשון · B.A",
+    "blurb": "אבחון וטיפול בהפרעות שפה, דיבור ושמיעה — חשיבה אבחונית ותכנון טיפול.",
+    "apps": [
+      {
+        "title": "סימולטור אבחון מבדל",
+        "assesses": "חשיבה אבחונית מול מקרה — איסוף מידע, שאילת השאלות הנכונות, בחירת מבחנים מתאימים והנמקת אבחנה מבדלת (התפתחותי מול נרכש), במקום שינון.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הכלי הכי פשוט — מדביקים את הפרומפט ומקבלים אפליקציה עובדת בלי שום התקנה.",
+        "prompt": "אני מרצה במסלול הפרעות בתקשורת, ואני רוצה לבנות אפליקציה קטנה שתעזור לסטודנטים שלי לתרגל חשיבה אבחונית.\n\nלפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזה מקרה להציג (ילד או מבוגר), אם זה התפתחותי או נרכש, רמת הקושי, וכמה שלבים תרצה. חכה לתשובות שלי, ורק אז תבנה.\n\nהאפליקציה מציגה לסטודנט מקרה קליני ומלווה אותו בשלושה שלבים: קודם הוא אוסף מידע ושואל את השאלות הנכונות, אחר כך בוחר אילו מבחנים מתאימים, ולבסוף מציע אבחנה ומנמק אותה. כך אני בודק חשיבה אבחונית אמיתית, לא שינון.\n\nאשמח שהאפליקציה תהיה בעברית ונוחה לשימוש בנייד, שתיתן משוב קצר ומיידי על כל בחירה, ובסוף תציג סיכום קצר של מה שהסטודנט עשה עם כפתור 'העתק סיכום' כדי שיגיש לי.",
+        "advancedPrompt": "אני מרצה במסלול הפרעות בתקשורת ורוצה את אותה אפליקציה של סימולטור אבחון מבדל, אבל עם תוספת חשובה: אני רוצה שהסטודנטים יתחברו עם חשבון Google, ושאני אוכל לראות את כל ההגשות שלהם במקום אחד.\n\nאני לא מתכנת, אז לפני הבנייה שאל אותי כמה שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי, ואחר כך הדרך אותי צעד אחר צעד מה לעשות — בשפה פשוטה וברורה."
+      },
+      {
+        "title": "מאמן תמלול פונטי (IPA)",
+        "assesses": "דיוק בתעתיק פונטי — שליטה אמיתית ביישום סימני IPA על מילים ומבעים, עם זיהוי טעויות בזמן אמת במקום ניחוש.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הכלי הכי פשוט — מדביקים את הפרומפט ומקבלים אפליקציה עובדת בלי שום התקנה.",
+        "prompt": "אני מרצה במסלול הפרעות בתקשורת, ואני רוצה לבנות אפליקציה קטנה שתעזור לסטודנטים שלי להתאמן בתעתיק פונטי ב-IPA.\n\nלפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, אילו מילים או מבעים להציג, אם בעברית או בשפה אחרת, רמת הקושי, וכמה פריטים לתרגל. חכה לתשובות שלי, ורק אז תבנה.\n\nהאפליקציה מציגה לסטודנט מילה או מבע, והוא מתרגל לכתוב את התעתיק שלו בסימני IPA. אחרי כל ניסיון הוא מקבל משוב קצר ומיידי — מה היה מדויק ומה כדאי לתקן. כך אני בודק שליטה אמיתית בתעתיק, לא ניחוש.\n\nאשמח שהאפליקציה תהיה בעברית ונוחה בנייד, עם דרך נוחה להזין את סימני ה-IPA, ובסוף תציג סיכום קצר של הביצועים עם כפתור 'העתק סיכום' כדי שהסטודנט יגיש לי.",
+        "advancedPrompt": "אני מרצה במסלול הפרעות בתקשורת ורוצה את אותה אפליקציה של מאמן תמלול פונטי, אבל עם תוספת חשובה: אני רוצה שהסטודנטים יתחברו עם חשבון Google, ושאני אוכל לראות את כל ההגשות שלהם במקום אחד.\n\nאני לא מתכנת, אז לפני הבנייה שאל אותי כמה שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי, ואחר כך הדרך אותי צעד אחר צעד מה לעשות, בשפה פשוטה וברורה."
+      },
+      {
+        "title": "מנסח מטרות טיפול (SMART)",
+        "assesses": "יישום ניסוח מטרות טיפול מדידות וריאליות לפי מודל SMART מול מקרה טיפולי — ספציפיות, מדידוּת, ברוּת-השגה, רלוונטיות ותיחום בזמן, במקום שינון הגדרה.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הכלי הכי פשוט — מדביקים את הפרומפט ומקבלים אפליקציה עובדת בלי שום התקנה.",
+        "prompt": "אני מרצה במסלול הפרעות בתקשורת, ואני רוצה לבנות אפליקציה קטנה שתעזור לסטודנטים שלי להתאמן בניסוח מטרות טיפול לפי מודל SMART — מטרות מדידות, ריאליות ומדויקות.\n\nלפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזה מקרה טיפולי להציג, אוכלוסייה (ילד או מבוגר), רמת הקושי, וכמה מטרות לתרגל. חכה לתשובות שלי, ורק אז תבנה.\n\nהאפליקציה מציגה לסטודנט מקרה טיפולי קצר ומבקשת ממנו לנסח מטרת טיפול. אחרי כל ניסוח הוא מקבל משוב קצר ומיידי — האם המטרה ספציפית, מדידה, ברת השגה, רלוונטית ותחומה בזמן. כך אני בודק יישום אמיתי, לא שינון הגדרה.\n\nאשמח שהאפליקציה תהיה בעברית ונוחה בנייד, תיתן משוב מיידי על כל מטרה, ובסוף תציג סיכום קצר עם כפתור 'העתק סיכום' כדי שהסטודנט יגיש לי.",
+        "advancedPrompt": "אני מרצה במסלול הפרעות בתקשורת ורוצה את אותה אפליקציה של מנסח מטרות טיפול, אבל עם תוספת חשובה: אני רוצה שהסטודנטים יתחברו עם חשבון Google, ושאני אוכל לראות את כל ההגשות שלהם במקום אחד.\n\nאני לא מתכנת, אז לפני הבנייה שאל אותי כמה שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי, ואחר כך הדרך אותי צעד אחר צעד מה לעשות, בשפה פשוטה וברורה."
+      }
+    ]
+  },
+  {
+    "id": "occupational-therapy",
+    "name": "ריפוי בעיסוק",
+    "degree": "תואר ראשון · B.O.T",
+    "blurb": "שיקום תפקודי דרך עיסוק משמעותי — ניתוח פעילות, הערכה ותכנון התערבות.",
+    "apps": [
+      {
+        "title": "מנתח פעילות",
+        "assesses": "ניתוח פעילות — היכולת לפרק פעילות יומיומית למרכיבים מוטוריים, קוגניטיביים, חושיים וחברתיים, ולהבין את ההיגיון שמאחורי הפירוק.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הכלי הכי פשוט — מעתיקים את הבקשה, מדביקים, ותוך רגע יש אפליקציה עובדת בלי שום התקנה.",
+        "prompt": "אני מרצה במסלול ריפוי בעיסוק, ולפני שתתחיל לבנות משהו — שאל אותי קודם 3-5 שאלות הבהרה קצרות וחכה לתשובות שלי, כדי שנתאים את האפליקציה בדיוק לקורס שלי. למשל: באיזה קורס מדובר, איזו פעילות יומיומית להציג (כמו הכנת כוס תה או לבישת חולצה), ובאיזו רמת קושי.\n\nאני רוצה אפליקציה קטנה שתעזור לסטודנטים לתרגל ניתוח פעילות — לקחת פעילות יומיומית ולפרק אותה למרכיבים שלה: מוטורי, קוגניטיבי, חושי וחברתי. האפליקציה תציג פעילות, והסטודנט ישייך כל שלב לקטגוריה הנכונה. כך אני בודק אם הוא באמת מבין את ההיגיון מאחורי הניתוח, ולא רק משנן.\n\nחשוב לי שהאפליקציה תהיה בעברית, נוחה בנייד, ותיתן משוב קצר ומיידי על כל בחירה. בסוף שתציג סיכום קצר עם כפתור \"העתק סיכום\", כדי שהסטודנט יוכל לשלוח לי את התוצאה.",
+        "advancedPrompt": "זו אותה אפליקציה למנתח פעילות, אבל הפעם אני רוצה תוספת: שהסטודנטים יתחברו עם חשבון Google כשהם נכנסים, ושאני אוכל לראות את כל ההגשות שלהם במקום אחד מסודר — מי ענה, מתי, ומה הסיכום שלו.\n\nאני לא מתכנת ולא מבין בזה בכלל, אז לפני שתתחיל שאל אותי כמה שאלות הבהרה קצרות, ואחר כך הדרך אותי צעד-אחר-צעד מה לעשות בכל שלב, בשפה פשוטה. אל תניח שאני יודע משהו טכני.\n\nכל השאר נשאר כמו קודם: עברית, נוח בנייד, משוב קצר ומיידי, וסיכום בסוף עם כפתור העתקה."
+      },
+      {
+        "title": "סימולטור הערכה ותכנון התערבות",
+        "assesses": "יישום חשיבה קלינית — בניית תוכנית התערבות מבוססת-מודל מול מקרה אמיתי, מזיהוי הקשיים ועד בחירת מטרות והתערבות.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הכלי הכי פשוט והכי ידידותי — מדביקים בקשה אחת ומקבלים אפליקציה מוכנה, בלי קוד ובלי כאב ראש.",
+        "prompt": "אני מרצה במסלול ריפוי בעיסוק, ולפני שתתחיל לבנות — שאל אותי קודם 3-5 שאלות הבהרה קצרות וחכה לתשובות שלי, כדי שנתאים את האפליקציה בדיוק לקורס שלי. למשל: באיזה קורס מדובר, איזה מקרה להציג, באיזה מודל מקצועי להתמקד, ובאיזו רמת קושי.\n\nאני רוצה אפליקציה שתאפשר לסטודנטים להתאמן בבניית תוכנית התערבות מול מקרה אמיתי. האפליקציה תציג מקרה ותלווה את הסטודנט צעד-אחר-צעד: לזהות את הקשיים, לבחור מטרות, ולבנות התערבות מתאימה. כך אני בודק את היכולת שלו ליישם חשיבה מקצועית על מצב אמיתי, ולא רק לדקלם תיאוריה.\n\nחשוב לי שהאפליקציה תהיה בעברית, נוחה בנייד, ותיתן משוב קצר ומיידי על כל החלטה. בסוף שתציג סיכום קצר של התוכנית שהסטודנט בנה, עם כפתור \"העתק סיכום\" שיאפשר לו לשלוח לי אותה.",
+        "advancedPrompt": "זו אותה אפליקציה לסימולטור הערכה ותכנון התערבות, אבל הפעם אני רוצה תוספת: שהסטודנטים יתחברו עם חשבון Google כשהם נכנסים, ושאני אוכל לראות את כל תוכניות ההתערבות שהם בנו במקום אחד מסודר.\n\nאני לא מתכנת ולא מבין בזה בכלל, אז לפני שתתחיל שאל אותי כמה שאלות הבהרה קצרות, ואחר כך הדרך אותי צעד-אחר-צעד מה לעשות בכל שלב, בשפה פשוטה וברורה. אל תניח שאני יודע משהו טכני.\n\nכל השאר נשאר כמו קודם: עברית, נוח בנייד, משוב קצר ומיידי, וסיכום בסוף עם כפתור העתקה."
+      },
+      {
+        "title": "חידון יישום מודלים תיאורטיים",
+        "assesses": "התאמת תיאוריה לפרקטיקה — בחירת המודל או המסגרת התיאורטית המתאימים לתרחיש נתון ונימוק הבחירה.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הכלי הכי פשוט — מעתיקים, מדביקים, ויש חידון אינטראקטיבי מוכן בלי צורך בשום ידע טכני.",
+        "prompt": "אני מרצה במסלול ריפוי בעיסוק, ולפני שתתחיל לבנות — שאל אותי קודם 3-5 שאלות הבהרה קצרות וחכה לתשובות שלי, כדי שנתאים את החידון בדיוק לקורס שלי. למשל: באיזה קורס מדובר, אילו מודלים לכלול, איזה סוג תרחישים, וכמה שאלות שיהיו בחידון.\n\nאני רוצה חידון קצר שיעזור לסטודנטים להתאמן בבחירת המודל או המסגרת התיאורטית המתאימים לתרחיש — וגם לנמק למה. בכל שאלה החידון יציג תרחיש קצר, והסטודנט יבחר את המודל המתאים ויסביר בקצרה את הבחירה. כך אני בודק אם הוא יודע להתאים תיאוריה למצב אמיתי, ולא רק לזכור שמות של מודלים.\n\nחשוב לי שהחידון יהיה בעברית, נוח בנייד, וייתן משוב קצר ומיידי אחרי כל שאלה. בסוף שיציג סיכום קצר של התשובות עם כפתור \"העתק סיכום\", כדי שהסטודנט ישלח לי אותו.",
+        "advancedPrompt": "זה אותו חידון יישום מודלים תיאורטיים, אבל הפעם אני רוצה תוספת: שהסטודנטים יתחברו עם חשבון Google כשהם נכנסים, ושאני אוכל לראות את כל התשובות וההגשות שלהם במקום אחד מסודר.\n\nאני לא מתכנת ולא מבין בזה בכלל, אז לפני שתתחיל שאל אותי כמה שאלות הבהרה קצרות, ואחר כך הדרך אותי צעד-אחר-צעד מה לעשות, בשפה פשוטה. אל תניח שום ידע טכני מצידי.\n\nכל השאר נשאר כמו קודם: עברית, נוח בנייד, משוב קצר ומיידי אחרי כל שאלה, וסיכום בסוף עם כפתור העתקה."
+      }
+    ]
+  },
+  {
+    "id": "sport-therapy",
+    "name": "ספורטתרפיה",
+    "degree": "תואר ראשון · B.Sc",
+    "blurb": "מניעה, אבחון ושיקום של פציעות ספורט — מבחנים מיוחדים ופרוטוקולי שיקום.",
+    "apps": [
+      {
+        "title": "סימולטור הערכת פציעת ספורט",
+        "assesses": "חשיבה קלינית ויישום ידע: בחירת מבחנים מיוחדים, פירוש ממצאים והגעה לאבחנה מול פציעת ספורט, במקום שינון.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הכלי הכי פשוט — מדביקים את הפרומפט ומקבלים אפליקציה עובדת תוך דקות, בלי שום התקנה.",
+        "prompt": "אני מרצה במסלול ספורתרפיה ואני רוצה לבנות אפליקציה שמתרגלת הערכת פציעות ספורט.\n\nלפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזה מקרה או אזור בגוף להציג, רמת הקושי, וכמה שלבים או שאלות. חכה לתשובותיי ורק אז בנה.\n\nהאפליקציה מציגה לסטודנט מקרה של ספורטאי פצוע, ומבקשת ממנו לבחור אילו מבחנים מיוחדים לבצע, לפרש את הממצאים, ולהגיע לאבחנה. כך אני בודק חשיבה קלינית ויישום ידע — לא שינון.\n\nאשמח שהיא תהיה בעברית, נוחה לשימוש בנייד, ותיתן משוב קצר ומיידי על כל בחירה (האם הכיוון נכון ולמה). בסוף שתציג לסטודנט סיכום קצר של הדרך שעשה ושל האבחנה, עם כפתור 'העתק סיכום' כדי שיוכל להגיש לי.",
+        "advancedPrompt": "אותה אפליקציה של סימולטור הערכת פציעות הספורט, ובתוספת אחת שחשובה לי: אני רוצה שהסטודנטים יתחברו עם חשבון Google לפני שהם מתחילים, וכך כל הגשה תישמר על שמם. בנוסף, אני רוצה מסך שבו אני, כמרצה, רואה את כל ההגשות של כל הסטודנטים במקום אחד מרוכז — מי ענה, מה בחר, ולאיזו אבחנה הגיע.\n\nאני לא מתכנת, אז לפני שתתחיל לבנות שאל אותי כמה שאלות הבהרה קצרות (למשל באיזה קורס מדובר, איזה מקרה להציג, וכמה סטודנטים מתוכננים), ורק אז בנה. ואחר כך הדרך אותי צעד-אחר-צעד, בשפה פשוטה, מה אני צריך לעשות מצדי."
+      },
+      {
+        "title": "בונה פרוטוקול שיקום מדורג",
+        "assesses": "יישום עקרונות שיקום: בניית תוכנית מדורגת עם תרגילים, עומסים וקצב התקדמות מתאים לפציעה — לא רק זכירת העקרונות.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הכי ידידותי למתחילים — מדביקים פרומפט אחד ומקבלים אפליקציה מוכנה, בלי קוד ובלי התקנות.",
+        "prompt": "אני מרצה במסלול ספורתרפיה ואני רוצה לבנות אפליקציה שמתרגלת בניית פרוטוקול שיקום מדורג.\n\nלפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, מול איזו פציעה לבנות את השיקום, רמת הקושי, וכמה שלבים בתוכנית. חכה לתשובותיי ורק אז בנה.\n\nהאפליקציה מציגה לסטודנט מקרה של ספורטאי אחרי פציעה, ומבקשת ממנו לבנות תוכנית שיקום שלב אחר שלב — לבחור תרגילים, עומסים וקצב התקדמות מתאים לכל שלב. כך אני בודק את היכולת ליישם עקרונות של עומס והתקדמות בהדרגה, ולא רק לזכור אותם.\n\nאשמח שהיא תהיה בעברית, נוחה בנייד, ותיתן משוב קצר ומיידי על כל בחירה (האם העומס מתאים לשלב ולמה). בסוף שתציג סיכום קצר של התוכנית שהסטודנט בנה, עם כפתור 'העתק סיכום' כדי שיגיש לי.",
+        "advancedPrompt": "אותה אפליקציה של בונה פרוטוקול שיקום, ובתוספת אחת שחשובה לי: אני רוצה שהסטודנטים יתחברו עם חשבון Google לפני שמתחילים, כך שכל תוכנית שיקום שהם בונים תישמר על שמם. ובנוסף, מסך שבו אני כמרצה רואה את כל ההגשות במקום אחד מרוכז — מי בנה, ואילו שלבים ועומסים בחר.\n\nאני לא מתכנת, אז לפני שתתחיל לבנות שאל אותי כמה שאלות הבהרה קצרות (למשל באיזה קורס מדובר, מול איזו פציעה, וכמה שלבים), ורק אז בנה. ואחר כך הדרך אותי צעד-אחר-צעד, בשפה פשוטה, מה אני צריך לעשות מצדי."
+      },
+      {
+        "title": "מאמן החלטת חזרה לפעילות",
+        "assesses": "שיקול דעת קליני: החלטה מבוססת קריטריונים אם ומתי הספורטאי חוזר לפעילות — החלטה מנומקת, לא ניחוש.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הדרך הכי פשוטה — מעתיקים פרומפט, מדביקים, ויש אפליקציה אינטראקטיבית מוכנה.",
+        "prompt": "אני מרצה במסלול ספורתרפיה ואני רוצה לבנות אפליקציה שמתרגלת את ההחלטה אם ומתי ספורטאי חוזר לפעילות.\n\nלפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזה מקרה או פציעה להציג, רמת הקושי, וכמה קריטריונים לבדוק. חכה לתשובותיי ורק אז בנה.\n\nהאפליקציה מציגה לסטודנט מקרה של ספורטאי לקראת חזרה לפעילות, ומבקשת ממנו לבדוק קריטריונים שונים (כמו כוח, יציבות, כאב ותחושת ביטחון) ולהחליט אם הספורטאי מוכן לחזור, חוזר חלקית, או עדיין לא. כך אני בודק שיקול דעת קליני והחלטה מבוססת קריטריונים, ולא ניחוש.\n\nאשמח שהיא תהיה בעברית, נוחה בנייד, ותיתן משוב קצר ומיידי על כל החלטה (האם היא בטוחה ולמה). בסוף שתציג סיכום קצר של ההחלטה והנימוקים, עם כפתור 'העתק סיכום' כדי שיגיש לי.",
+        "advancedPrompt": "אותה אפליקציה של מאמן החלטת חזרה לפעילות, ובתוספת אחת שחשובה לי: אני רוצה שהסטודנטים יתחברו עם חשבון Google לפני שמתחילים, כך שכל החלטה שהם מקבלים תישמר על שמם. ובנוסף, מסך שבו אני כמרצה רואה את כל ההגשות במקום אחד מרוכז — מי החליט מה, ועל סמך אילו קריטריונים.\n\nאני לא מתכנת, אז לפני שתתחיל לבנות שאל אותי כמה שאלות הבהרה קצרות (למשל באיזה קורס מדובר, איזה מקרה, וכמה קריטריונים), ורק אז בנה. ואחר כך הדרך אותי צעד-אחר-צעד, בשפה פשוטה, מה אני צריך לעשות מצדי."
+      }
+    ]
+  },
+  {
+    "id": "physiotherapy",
+    "name": "פיזיותרפיה",
+    "degree": "תואר ראשון · B.P.T",
+    "blurb": "שיקום תנועה ותפקוד — חשיבה קלינית, אנטומיה ומרשם תרגול.",
+    "apps": [
+      {
+        "title": "סימולטור חשיבה קלינית",
+        "assesses": "חשיבה אבחנתית והיגיון קליני — איסוף אנמנזה, בחירת בדיקות, גיבוש אבחנה ובניית טיפול מותאם למטופל, במקום שינון.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הכלי הכי פשוט — מדביקים את הפרומפט ומקבלים אפליקציה עובדת, בלי שום התקנה.",
+        "prompt": "אני מרצה במסלול פיזיותרפיה. לפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזה מקרה או תחום להציג (אורתופדי, נוירולוגי או קרדיו-נשימתי), רמת הקושי, וכמה שלבים יהיו. חכה לתשובותיי ורק אז בנה.\n\nאני רוצה אפליקציה שמתרגלת חשיבה קלינית מול מטופל וירטואלי: הסטודנט מתקדם שלב-אחר-שלב — איסוף אנמנזה, בחירת בדיקות מתאימות, ניסוח אבחנה ובניית קו טיפול ראשוני. בכל בחירה אני רוצה משוב מיידי וקצר — האם היא מתאימה למקרה ולמה — כדי שילמד תוך כדי. זה בודק חשיבה אבחנתית והיגיון קליני, לא שינון.\n\nחשוב לי שהאפליקציה תהיה בעברית, נוחה לשימוש בנייד, ובסוף תציג לסטודנט סיכום קצר של ההחלטות שלו עם כפתור 'העתק סיכום', כדי שיגיש לי בקלות.",
+        "advancedPrompt": "אני מרצה במסלול פיזיותרפיה ורוצה את אותו סימולטור חשיבה קלינית, ובנוסף אני רוצה שהסטודנטים יתחברו עם חשבון Google לפני שהם מתחילים לעבוד, ושאני אוכל לראות את כל ההגשות שלהם מרוכזות במקום אחד, כדי לעקוב מי הגיש ומה החליט. אני לא מתכנת ואני קצת חושש מהצד הטכני — אז לפני שאתה בונה, שאל אותי קודם כמה שאלות הבהרה קצרות שיעזרו להתאים את האפליקציה אליי, ואחר כך הדרך אותי צעד-אחר-צעד מה בדיוק לעשות בכל שלב, בשפה פשוטה וברורה ובלי למהר."
+      },
+      {
+        "title": "חידון אנטומיה/ביומכניקה",
+        "assesses": "זיהוי מדויק והבנה של אנטומיה וביומכניקה — שרירים, תנועות ומישורים אנטומיים — עם יכולת להסביר ולא רק לזכור.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הכלי הכי פשוט — מדביקים פרומפט אחד ומקבלים חידון מוכן לשימוש, בלי התקנות.",
+        "prompt": "אני מרצה במסלול פיזיותרפיה. לפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את החידון אליי — למשל באיזה קורס מדובר, על איזה נושא להתמקד (זיהוי שרירים, סוגי תנועות, או מישורים וצירים אנטומיים), רמת הקושי, וכמה שאלות יהיו. חכה לתשובותיי ורק אז בנה.\n\nאני רוצה חידון אינטראקטיבי באנטומיה וביומכניקה: בכל שאלה הסטודנט בוחר תשובה ומקבל מיד משוב קצר — האם צדק, ואם לא, הסבר קצר ומדויק מקצועית שמחדד את ההבנה. החידון בודק זיהוי מדויק והבנה של תנועה ומבנה הגוף, לא רק שינון שמות.\n\nחשוב לי שהחידון יהיה בעברית, נוח לשימוש בנייד, ובסוף יציג לסטודנט סיכום קצר עם הציון והתשובות שלו וכפתור 'העתק סיכום', כדי שיגיש לי.",
+        "advancedPrompt": "אני מרצה במסלול פיזיותרפיה ורוצה את אותו חידון אנטומיה וביומכניקה, ובנוסף אני רוצה שהסטודנטים יתחברו עם חשבון Google לפני שהם מתחילים, ושכל התשובות והציונים שלהם יגיעו אליי למקום אחד מרוכז, כדי שאוכל לראות איך הכיתה הסתדרה. אני לא מתכנת ואני קצת חושש מהצד הטכני — אז לפני שאתה בונה, שאל אותי קודם כמה שאלות הבהרה קצרות שיעזרו להתאים את החידון אליי, ואחר כך הדרך אותי צעד-אחר-צעד מה בדיוק לעשות, בשפה פשוטה וברורה ובלי למהר."
+      },
+      {
+        "title": "רושם תרגילים (FITT)",
+        "assesses": "יישום קליני של מרשם תרגול לפי FITT — התאמת תדירות, עצימות, סוג ומשך לאבחנה ולמטופל בצורה בטוחה, לא שינון נוסחאות.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הכלי הכי פשוט — מעתיקים את הפרומפט, מדביקים, ומקבלים אפליקציה עובדת בלי שום ידע טכני.",
+        "prompt": "אני מרצה במסלול פיזיותרפיה. לפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזו אבחנה או אוכלוסייה להציג, רמת הקושי, וכמה תרגילים הסטודנט יבנה. חכה לתשובותיי ורק אז בנה.\n\nאני רוצה אפליקציה שמתרגלת בניית מרשם תרגול לפי עקרון FITT (תדירות, עצימות, סוג ומשך): האפליקציה מציגה אבחנה, והסטודנט בונה מולה תוכנית תרגול וקובע את המינון. בכל בחירה אני רוצה משוב מיידי וקצר — האם המינון מתאים ובטוח למקרה, ואם לא, למה. זה בודק יישום נכון של מרשם תרגול והתאמה למטופל, לא שינון נוסחאות.\n\nחשוב לי שהאפליקציה תהיה בעברית, נוחה בנייד, ובסוף תציג סיכום קצר של התוכנית שהסטודנט בנה עם כפתור 'העתק סיכום', כדי שיגיש לי.",
+        "advancedPrompt": "אני מרצה במסלול פיזיותרפיה ורוצה את אותה אפליקציית מרשם תרגול לפי FITT, ובנוסף אני רוצה שהסטודנטים יתחברו עם חשבון Google לפני שהם מתחילים, ושכל התוכניות שהם בונים יגיעו אליי למקום אחד מרוכז, כדי שאוכל לעבור עליהן בנוחות. אני לא מתכנת ואני קצת חושש מהצד הטכני — אז לפני שאתה בונה, שאל אותי קודם כמה שאלות הבהרה קצרות שיעזרו להתאים את האפליקציה אליי, ואחר כך הדרך אותי צעד-אחר-צעד מה בדיוק לעשות בכל שלב, בשפה פשוטה וברורה ובלי למהר."
+      }
+    ]
+  },
+  {
+    "id": "health-sciences-ma",
+    "name": "מדעי הבריאות והשיקום",
+    "degree": "תואר שני · M.A (בין-תחומי)",
+    "blurb": "תואר שני בין-תחומי בשיקום — מחקר, קריאה ביקורתית ותכנון תוכניות.",
+    "apps": [
+      {
+        "title": "מאמן הערכת מאמרים (Critical Appraisal)",
+        "assesses": "הערכה ביקורתית של מחקר מתוך תקציר — שקלול תוקף, זיהוי הטיות אפשריות ושיפוט הישימות הקלינית של הממצאים. בודקת חשיבה ביקורתית ויישום שיקול דעת מקצועי, לא שינון.",
+        "tool": "canvas",
+        "toolWhy": "קנבס הוא הכלי הכי פשוט — מדביקים בקשה אחת ומקבלים אפליקציה עובדת, בלי שום התקנה.",
+        "prompt": "לפני שתתחיל לבנות, אשמח שתשאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזה סוג מחקר או תקציר להציג, רמת הקושי, וכמה שאלות לכלול. חכה לתשובותיי ורק אז תבנה.\n\nאני מרצה במסלול מדעי הבריאות והשיקום, ואני רוצה לבנות אפליקציה שמאמנת סטודנטים בהערכה ביקורתית של מאמר מחקר. האפליקציה מציגה תקציר של מחקר ומובילה את הסטודנט שלב-אחר-שלב לשקול את תוקף המחקר, לזהות הטיות אפשריות, ולשפוט עד כמה הממצאים ישימים בשטח הקליני. בכל שלב הסטודנט בוחר או כותב תשובה קצרה, ומקבל מיד משוב קצר וברור שמחזק חשיבה נכונה ומאיר נקודות שפספס.\n\nאשמח שהאפליקציה תהיה בעברית, נוחה לשימוש בנייד ורגועה וזורמת. בסוף אשמח שתציג לסטודנט סיכום קצר של ההערכה שלו, עם כפתור 'העתק סיכום', כדי שיוכל לשלוח לי אותו בקלות.",
+        "advancedPrompt": "אני מרצה במסלול מדעי הבריאות והשיקום ורוצה לבנות אפליקציה שמאמנת סטודנטים בהערכה ביקורתית של מאמר מחקר — תוקף, הטיות וישימות קלינית — עם משוב קצר על כל שלב וסיכום בסוף.\n\nבנוסף, אני רוצה שהסטודנטים יתחברו לאפליקציה עם חשבון Google שלהם, ושאני אוכל לראות את כל ההגשות שלהם במקום אחד מרוכז.\n\nאני לא מתכנת ולא מבין בזה כלום — אז לפני שתתחיל, שאל אותי כמה שאלות הבהרה קצרות, ואחר כך הדרך אותי צעד-אחר-צעד מה אני צריך לעשות, בשפה פשוטה וברורה."
+      },
+      {
+        "title": "סימולטור תכנון שיקום בין-תחומי",
+        "assesses": "בניית תוכנית שיקום רב-מקצועית מול מקרה מורכב — בחירת אנשי המקצוע, הגדרת מטרות, והסבר התרומה הייחודית של כל דיסציפלינה. בודקת חשיבה משולבת ויכולת תיאום בין-תחומי, לא ידע מבודד.",
+        "tool": "canvas",
+        "toolWhy": "בקנבס פשוט מדביקים את הבקשה ומקבלים אפליקציה מוכנה לשימוש — בלי שום ידע טכני.",
+        "prompt": "לפני שתתחיל לבנות, אשמח שתשאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזה מקרה או אבחנה להציג, אילו דיסציפלינות לכלול, ורמת הקושי. חכה לתשובותיי ורק אז תבנה.\n\nאני מרצה במסלול מדעי הבריאות והשיקום, ואני רוצה לבנות אפליקציה שמתרגלת סטודנטים בתכנון שיקום בין-תחומי. האפליקציה מציגה מקרה מורכב של מטופל, והסטודנט בונה עבורו תוכנית רב-מקצועית: בוחר אילו אנשי מקצוע לשלב, מגדיר מטרות, ומסביר מהי התרומה הייחודית של כל דיסציפלינה לתהליך. בכל בחירה הסטודנט מקבל מיד משוב קצר שמכוון אותו לחשיבה משולבת ולתיאום בין התחומים.\n\nאשמח שהאפליקציה תהיה בעברית, נוחה בנייד וזורמת לשימוש. בסוף אשמח שתציג לסטודנט סיכום קצר של התוכנית שבנה, עם כפתור 'העתק סיכום', כדי שיוכל לשלוח לי אותו להערכה.",
+        "advancedPrompt": "אני מרצה במסלול מדעי הבריאות והשיקום ורוצה לבנות אפליקציה שבה סטודנטים בונים תוכנית שיקום בין-תחומית מול מקרה מורכב, מסבירים את תרומת כל דיסציפלינה, ומקבלים משוב קצר וסיכום בסוף.\n\nבנוסף, אני רוצה שהסטודנטים יתחברו עם חשבון Google שלהם, ושאני אוכל לראות את כל ההגשות שלהם במקום אחד מרוכז.\n\nאני לא מתכנת ולא מבין בזה כלום — אז לפני הבנייה שאל אותי כמה שאלות הבהרה קצרות, ואחר כך הדרך אותי צעד-אחר-צעד מה לעשות, בשפה פשוטה וברורה."
+      },
+      {
+        "title": "מבקר הצעת מחקר (PICO)",
+        "assesses": "ניסוח שאלת מחקר ופירוקה לפי מסגרת PICO (אוכלוסייה, התערבות, השוואה, תוצאה) ובחירת תכנון מתודולוגי מתאים. בודקת חשיבה מחקרית מסודרת ודיוק בניסוח, לא העתקת תבנית.",
+        "tool": "canvas",
+        "toolWhy": "קנבס הוא הדרך הכי קלה — בקשה אחת הופכת לאפליקציה אינטראקטיבית, בלי קוד ובלי התקנה.",
+        "prompt": "לפני שתתחיל לבנות, אשמח שתשאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, באיזה תחום מחקר להתמקד, רמת הקושי, וכמה שלבים לכלול. חכה לתשובותיי ורק אז תבנה.\n\nאני מרצה במסלול מדעי הבריאות והשיקום, ואני רוצה לבנות אפליקציה שנותנת לסטודנטים משוב מובנה על הצעת מחקר. הסטודנט מנסח שאלת מחקר ומפרק אותה לפי מסגרת PICO — אוכלוסייה, התערבות, השוואה ותוצאה — ואז בוחר תכנון מתאים. בכל שלב האפליקציה נותנת משוב קצר וברור: מה חזק בניסוח, מה עדיין מעורפל, ואיך לחדד. המטרה היא לאמן חשיבה מחקרית מסודרת, לא לתת תשובה מוכנה.\n\nאשמח שהאפליקציה תהיה בעברית, נוחה בנייד וזורמת. בסוף אשמח שתציג לסטודנט סיכום קצר של ההצעה שלו, עם כפתור 'העתק סיכום', כדי שיוכל לשלוח לי אותו.",
+        "advancedPrompt": "אני מרצה במסלול מדעי הבריאות והשיקום ורוצה לבנות אפליקציה שנותנת לסטודנטים משוב מובנה על שאלת מחקר ותכנון לפי מסגרת PICO, עם משוב קצר בכל שלב וסיכום בסוף.\n\nבנוסף, אני רוצה שהסטודנטים יתחברו עם חשבון Google שלהם, ושאני אוכל לראות את כל ההגשות שלהם במקום אחד מרוכז.\n\nאני לא מתכנת ולא מבין בזה כלום — אז לפני שתתחיל, שאל אותי כמה שאלות הבהרה קצרות, ואחר כך הדרך אותי צעד-אחר-צעד מה אני צריך לעשות, בשפה פשוטה."
+      }
+    ]
+  },
+  {
+    "id": "nursing-care-management",
+    "name": "סיעוד — ניהול טיפול",
+    "degree": "תואר שני · M.A",
+    "blurb": "ניהול ותיאום טיפול במקרים מורכבים — מערכות בריאות, זכויות ומשאבים.",
+    "apps": [
+      {
+        "title": "סימולטור ניהול מקרה מורכב",
+        "assesses": "היכולת לתאם שירותים, להקצות משאבים מוגבלים ולבנות תוכנית טיפול למטופל כרוני מורכב — חשיבה מערכתית ושיקול דעת קליני-ניהולי תוך כדי יישום, לא שינון.",
+        "tool": "canvas",
+        "toolWhy": "קנבס הוא הכלי הכי פשוט — מדביקים את הבקשה ומקבלים אפליקציה מוכנה לשימוש, בלי שום התקנה.",
+        "prompt": "אני מרצה במסלול סיעוד — ניהול טיפול לתואר שני, ואני רוצה לבנות אפליקציה אינטראקטיבית שתעזור לי להעריך את הסטודנטים שלי.\n\nלפני שתתחיל לבנות, אשמח שתשאל אותי קודם שלוש עד חמש שאלות הבהרה קצרות, כדי שנתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזה מקרה או מטופל להציג, באיזו רמת קושי, וכמה שלבים או החלטות יהיו. חכה לתשובות שלי, ורק אז תתחיל.\n\nהאפליקציה היא סימולטור של ניהול מקרה מורכב: הסטודנט מלווה מטופל כרוני, ובכל שלב מחליט אילו שירותים לתאם ואיך להקצות משאבים מוגבלים. כך אני בודק חשיבה מערכתית ושיקול דעת אמיתי, לא שינון.\n\nאשמח שהאפליקציה תהיה בעברית, נוחה לשימוש בטלפון, ותיתן משוב קצר ומיידי על כל החלטה. בסוף, שתציג לסטודנט סיכום קצר עם כפתור \"העתק סיכום\", כדי שיוכל להגיש לי בקלות.",
+        "advancedPrompt": "אני מרצה במסלול סיעוד — ניהול טיפול, ואני רוצה את אותו סימולטור ניהול מקרה מורכב, עם תוספת חשובה: שהסטודנטים יתחברו עם חשבון Google, ושאני אוכל לראות את כל ההגשות שלהם במקום אחד מסודר.\n\nאני לא מתכנת ולא מבין בזה, אז לפני שתתחיל — שאל אותי כמה שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי. אחר כך הדרך אותי צעד אחר צעד, בשפה פשוטה, מה בדיוק אני צריך לעשות כדי שזה יעבוד.\n\nחשוב לי שהכול יישאר בעברית, נוח בטלפון, עם משוב קצר על כל החלטה וסיכום מסכם בסוף."
+      },
+      {
+        "title": "מנווט מערכת בריאות וזכויות",
+        "assesses": "היכולת לזהות בתרחיש את הזכויות, המסלולים והכיסוי הביטוחי הנכונים למטופל — ניווט מדויק במערכת הבריאות ויישום ידע על זכויות מטופל בתוך מצב אמיתי, לא שינון.",
+        "tool": "canvas",
+        "toolWhy": "קנבס הוא הדרך הכי קלה — מדביקים את הבקשה ומקבלים אפליקציה עובדת, בלי שום ידע טכני.",
+        "prompt": "אני מרצה במסלול סיעוד — ניהול טיפול לתואר שני, ואני רוצה לבנות אפליקציה אינטראקטיבית להערכת הסטודנטים שלי.\n\nלפני שתתחיל לבנות, אשמח שתשאל אותי קודם שלוש עד חמש שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזה תרחיש או מטופל להציג, באיזו רמת קושי, וכמה שאלות יהיו. חכה לתשובות שלי, ורק אז תתחיל.\n\nהאפליקציה היא מנווט מערכת בריאות וזכויות: הסטודנט מקבל תרחיש של מטופל, וצריך לזהות אילו זכויות מגיעות לו, לאיזה מסלול לפנות ומה הכיסוי הביטוחי הנכון. כך אני בודק יכולת ניווט אמיתית במערכת ויישום ידע, לא שינון.\n\nאשמח שהאפליקציה תהיה בעברית, נוחה בטלפון, ותיתן משוב קצר ומיידי על כל בחירה. בסוף, שתציג לסטודנט סיכום קצר עם כפתור \"העתק סיכום\" שיוכל להגיש לי.",
+        "advancedPrompt": "אני מרצה במסלול סיעוד — ניהול טיפול, ואני רוצה את אותו מנווט מערכת בריאות וזכויות, עם תוספת: שהסטודנטים יתחברו עם חשבון Google, ושאני אוכל לראות את כל ההגשות שלהם במקום אחד מרוכז.\n\nאני לא מתכנת, אז לפני שתתחיל — שאל אותי כמה שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי, ואחר כך הדרך אותי צעד אחר צעד, בשפה פשוטה, מה בדיוק לעשות כדי שזה יעבוד.\n\nחשוב לי שהכול יישאר בעברית, נוח בטלפון, עם משוב קצר על כל בחירה וסיכום בסוף."
+      },
+      {
+        "title": "מתעדף Caseload",
+        "assesses": "היכולת לתעדף רשימת מטופלים ולנמק את שיקולי התעדוף — שיקול דעת קליני-ניהולי, ניהול עומס ויישום סדרי עדיפויות בתוך מצב מציאותי, לא שינון.",
+        "tool": "canvas",
+        "toolWhy": "קנבס הוא הכלי הכי ידידותי — מדביקים את הבקשה ומקבלים אפליקציה מוכנה, בלי להתעסק בכלום.",
+        "prompt": "אני מרצה במסלול סיעוד — ניהול טיפול לתואר שני, ואני רוצה לבנות אפליקציה אינטראקטיבית שתעזור לי להעריך את הסטודנטים.\n\nלפני שתתחיל לבנות, אשמח שתשאל אותי קודם שלוש עד חמש שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, אילו מטופלים להציג ברשימה, באיזו רמת קושי, וכמה מקרים יהיו. חכה לתשובות שלי, ורק אז תתחיל.\n\nהאפליקציה היא מתעדף Caseload: הסטודנט מקבל רשימת מטופלים, מסדר אותם לפי סדר עדיפות לטיפול, ומסביר בקצרה למה. כך אני בודק שיקול דעת אמיתי וניהול עומס, לא שינון.\n\nאשמח שהאפליקציה תהיה בעברית, נוחה בטלפון, ותיתן משוב קצר ומיידי על כל בחירה. בסוף, שתציג לסטודנט סיכום קצר עם כפתור \"העתק סיכום\" שיוכל להגיש לי.",
+        "advancedPrompt": "אני מרצה במסלול סיעוד — ניהול טיפול, ואני רוצה את אותו מתעדף Caseload, עם תוספת: שהסטודנטים יתחברו עם חשבון Google, ושאני אוכל לראות את כל ההגשות שלהם במקום אחד מסודר.\n\nאני לא מתכנת, אז לפני שתתחיל — שאל אותי כמה שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי, ואחר כך הדרך אותי צעד אחר צעד, בשפה פשוטה, מה בדיוק לעשות כדי שזה יעבוד."
+      }
+    ]
+  },
+  {
+    "id": "nursing-psychiatry",
+    "name": "סיעוד — פסיכיאטריה",
+    "degree": "תואר שני · M.A",
+    "blurb": "סיעוד בבריאות הנפש — פסיכופתולוגיה, תקשורת טיפולית והערכת סיכון.",
+    "apps": [
+      {
+        "title": "סימולטור תקשורת טיפולית",
+        "assesses": "יישום טכניקות תקשורת טיפולית בזמן אמת — הקשבה פעילה, שיקוף, אמפתיה ושאלות פתוחות מול מטופל, במקום שינון של הגדרות.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הכלי הכי פשוט — מעתיקים את הפרומפט, מדביקים, ומקבלים אפליקציה עובדת בלי שום התקנה.",
+        "prompt": "אני מרצה בסיעוד-פסיכיאטריה לתואר שני, ואני לא מתכנת. לפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזה מקרה או מצב נפשי להציג, באיזו רמת קושי, וכמה סבבי שיחה לכלול. חכה לתשובותיי ורק אז התחל לבנות.\n\nאני רוצה אפליקציה שבה הסטודנטים מתרגלים תקשורת טיפולית מול דמות מטופל בצ'אט. הדמות מגיבה כמו אדם אמיתי, והסטודנט מנהל איתה שיחה. אחרי כל תגובה של הסטודנט תן משוב קצר ומיידי: אילו טכניקות תקשורת טיפולית יישם — הקשבה פעילה, שיקוף, אמפתיה ושאלות פתוחות — ומה אפשר לשפר. זה בודק חשיבה ויישום בזמן אמת, לא שינון.\n\nשתהיה בעברית, נוחה לשימוש בנייד, ובסוף תציג לסטודנט סיכום קצר של הביצוע עם כפתור 'העתק סיכום' כדי שיגיש לי.",
+        "advancedPrompt": "אני מרצה בסיעוד-פסיכיאטריה ורוצה את אותה אפליקציה לתרגול תקשורת טיפולית מול דמות מטופל בצ'אט, עם משוב מיידי וקצר על הטכניקות.\n\nבנוסף, אני רוצה שהסטודנטים יתחברו עם חשבון Google, ושאני אוכל לראות את כל ההגשות שלהם במקום אחד מרוכז ונוח.\n\nאני לא מתכנת — אז לפני הבנייה שאל אותי קודם כמה שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי, ואחר כך הדרך אותי צעד-אחר-צעד מה לעשות, בשפה פשוטה וברורה."
+      },
+      {
+        "title": "מאמן הערכת מצב נפשי (MSE)",
+        "assesses": "שיקול דעת קליני בביצוע הערכת מצב נפשי מובנית — זיהוי נכון של ממצאים בכל תחום של ה-MSE על בסיס תיאור מטופל.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הכלי הכי פשוט — מדביקים פרומפט אחד ומקבלים אפליקציה מוכנה, בלי קוד ובלי התקנות.",
+        "prompt": "אני מרצה בסיעוד-פסיכיאטריה לתואר שני, ואני לא מתכנת. לפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי — למשל באיזה קורס מדובר, איזה מקרה מטופל להציג, באיזו רמת קושי, וכמה תחומי הערכה לכלול. חכה לתשובותיי ורק אז התחל לבנות.\n\nאני רוצה אפליקציה שמאמנת את הסטודנטים לבצע הערכת מצב נפשי מובנית מול תיאור של מטופל. האפליקציה מציגה תיאור מטופל, והסטודנט עובר תחום אחר תחום — מראה והתנהגות, מצב רוח ואפקט, חשיבה ותפיסה, תובנה ושיפוט. אחרי כל תחום תן משוב קצר ומיידי: האם הסטודנט זיהה נכון את הממצאים ומה פספס. זה בודק יישום מקצועי ושיקול דעת, לא שינון.\n\nשתהיה בעברית, נוחה לשימוש בנייד, ובסוף תציג סיכום קצר של ההערכה עם כפתור 'העתק סיכום' כדי שהסטודנט יגיש לי.",
+        "advancedPrompt": "אני מרצה בסיעוד-פסיכיאטריה ורוצה את אותה אפליקציה לאימון הערכת מצב נפשי מובנית מול תיאור מטופל, עם משוב מיידי וקצר בכל תחום.\n\nבנוסף, אני רוצה שהסטודנטים יתחברו עם חשבון Google, ושאני אוכל לראות את כל ההגשות שלהם בריכוז אחד נוח.\n\nאני לא מתכנת — אז לפני הבנייה שאל אותי קודם כמה שאלות הבהרה קצרות כדי להתאים את האפליקציה אליי, ואחר כך הדרך אותי צעד-אחר-צעד מה לעשות, בשפה פשוטה."
+      },
+      {
+        "title": "חידון פסיכופרמקולוגיה ובטיחות",
+        "assesses": "שיקול דעת קליני ובטיחות תרופתית — זיהוי אינטראקציות בין תרופות, תופעות לוואי והערכת סיכון בתרחישים מהשטח.",
+        "tool": "canvas",
+        "toolWhy": "Canvas הוא הכלי הכי פשוט — מעתיקים פרומפט אחד, מדביקים, והחידון מוכן לשימוש בלי שום ידע טכני.",
+        "prompt": "אני מרצה בסיעוד-פסיכיאטריה לתואר שני, ואני לא מתכנת. לפני שתתחיל לבנות, שאל אותי קודם 3-5 שאלות הבהרה קצרות כדי להתאים את החידון אליי — למשל באיזה קורס מדובר, על אילו תרופות או נושאים להתמקד, באיזו רמת קושי, וכמה שאלות לכלול. חכה לתשובותיי ורק אז התחל לבנות.\n\nאני רוצה חידון אינטראקטיבי בפסיכופרמקולוגיה ובטיחות תרופתית. החידון מציג תרחישים מהשטח — אינטראקציות בין תרופות, זיהוי תופעות לוואי והערכת סיכון — והסטודנט בוחר את התשובה הבטוחה ביותר. אחרי כל בחירה תן משוב קצר ומיידי: למה התשובה נכונה או שגויה, ומה חשוב לזכור לבטיחות המטופל. זה בודק שיקול דעת קליני ויישום, לא שינון.\n\nשיהיה בעברית, נוח לשימוש בנייד, ובסוף יציג לסטודנט סיכום קצר עם הנקודות לשיפור וכפתור 'העתק סיכום' כדי שיגיש לי.",
+        "advancedPrompt": "אני מרצה בסיעוד-פסיכיאטריה ורוצה את אותו חידון תרחישים בפסיכופרמקולוגיה ובטיחות, עם משוב מיידי וקצר על כל בחירה.\n\nבנוסף, אני רוצה שהסטודנטים יתחברו עם חשבון Google, ושאני אוכל לראות את כל ההגשות שלהם במקום מרוכז אחד.\n\nאני לא מתכנת — אז לפני הבנייה שאל אותי קודם כמה שאלות הבהרה קצרות כדי להתאים את החידון אליי, ואחר כך הדרך אותי צעד-אחר-צעד מה לעשות, בשפה פשוטה וברורה."
+      }
+    ]
+  }
+];
+  /* ===__TRACKS_DATA_END__=== */
+
+  /* ===== Icons ===== */
+  const ICON_COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+  const ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+  const ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>';
+  const ICON_EXT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>';
+  const ICON_CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+  const ICON_HEALTH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2 5 4-10 2 5h6"/></svg>';
+
+  /* ===== Helpers ===== */
+  function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function escapeAttr(s){return escapeHtml(s).replace(/"/g,'&quot;');}
+  let uid = 0;
+
+  function lsGet(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
+  function lsSet(key,val){ try{ localStorage.setItem(key,val); }catch(e){} }
+  function lsDel(key){ try{ localStorage.removeItem(key); }catch(e){} }
+
+  /* ===== Render track cards ===== */
+  const trackCardsEl = document.getElementById('track-cards');
+  function renderTrackCards(){
+    trackCardsEl.innerHTML = '';
+    TRACKS.forEach(track => {
+      const btn = document.createElement('button');
+      btn.className = 'track-card';
+      btn.type = 'button';
+      btn.dataset.track = track.id;
+      const n = track.apps.length;
+      btn.innerHTML =
+        '<div class="track-top">' +
+          '<span class="track-ico" aria-hidden="true">' + ICON_HEALTH + '</span>' +
+          '<span class="track-degree">' + escapeHtml(track.degree) + '</span>' +
+        '</div>' +
+        '<h3>' + escapeHtml(track.name) + '</h3>' +
+        '<p class="blurb">' + escapeHtml(track.blurb) + '</p>' +
+        '<span class="count">' + n + (n === 1 ? ' אפליקציה' : ' אפליקציות') + ' לבחירה ' + ICON_ARROW + '</span>';
+      btn.addEventListener('click', () => { location.hash = 'track=' + track.id; });
+      trackCardsEl.appendChild(btn);
+    });
+  }
+
+  /* ===== Render a track's app cards ===== */
+  const appCardsEl = document.getElementById('app-cards');
+  function renderTrack(track){
+    document.getElementById('track-title').textContent = track.name;
+    document.getElementById('track-degree').textContent = track.degree;
+    document.getElementById('track-blurb').textContent = track.blurb;
+    appCardsEl.innerHTML = '';
+    track.apps.forEach((app, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'app-card';
+      btn.type = 'button';
+      btn.setAttribute('aria-haspopup','dialog');
+      const toolLabel = app.tool === 'aistudio' ? 'מומלץ: Google AI Studio' : 'מומלץ: Gemini Canvas';
+      btn.innerHTML =
+        '<span class="tool-badge ' + (app.tool === 'aistudio' ? 'aistudio' : 'canvas') + '">' + escapeHtml(toolLabel) + '</span>' +
+        '<h3>' + escapeHtml(app.title) + '</h3>' +
+        '<p class="assesses">' + escapeHtml(app.assesses) + '</p>' +
+        '<span class="open-hint">פתיחה ועריכת הפרומפט ' + ICON_ARROW + '</span>';
+      btn.addEventListener('click', () => openAppModal(track, app, idx));
+      appCardsEl.appendChild(btn);
+    });
+  }
+
+  /* ===== Views / routing ===== */
+  const viewHome = document.getElementById('view-home');
+  const viewTrack = document.getElementById('view-track');
+
+  function showHome(){
+    viewTrack.hidden = true;
+    viewHome.hidden = false;
+    document.title = 'וויב קודינג ככלי הערכה · הפקולטה למקצועות הבריאות · אונו';
+  }
+  function showTrack(track){
+    renderTrack(track);
+    viewHome.hidden = true;
+    viewTrack.hidden = false;
+    document.title = track.name + ' · וויב קודינג ככלי הערכה · אונו';
+    window.scrollTo(0,0);
+    document.getElementById('back-btn').focus();
+  }
+  function handleRoute(){
+    const m = location.hash.match(/track=([^&]+)/);
+    if(m){
+      const track = TRACKS.find(t => t.id === decodeURIComponent(m[1]));
+      if(track){ showTrack(track); return; }
+    }
+    showHome();
+  }
+  document.getElementById('back-btn').addEventListener('click', () => {
+    if(history.length > 1){ history.back(); } else { location.hash = ''; }
+  });
+  window.addEventListener('hashchange', handleRoute);
+
+  /* ===== App modal ===== */
+  const modal = document.getElementById('modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalAssess = document.getElementById('modal-assess');
+  const modalBody = document.getElementById('modal-body');
+  const modalClose = document.getElementById('modal-close');
+
+  // registry of textarea originals + storage keys
+  const taOriginal = {};
+  const taStoreKey = {};
+
+  function promptBlock(label, text, storeKey){
+    uid++;
+    const id = 'ta-' + uid;
+    taOriginal[id] = text;
+    taStoreKey[id] = storeKey;
+    const saved = lsGet(storeKey);
+    const value = (saved !== null) ? saved : text;
+    return '' +
+      '<label class="prompt-label" for="' + id + '">' + escapeHtml(label) + '</label>' +
+      '<textarea class="prompt-input" id="' + id + '" spellcheck="false" dir="rtl">' + escapeHtml(value) + '</textarea>' +
+      '<div class="prompt-actions">' +
+        '<button type="button" class="btn-copy" data-target="' + id + '">' + ICON_COPY + '<span class="btn-label">העתקת הפרומפט</span></button>' +
+        '<button type="button" class="reset-link" data-reset="' + id + '">שחזור הטקסט המקורי</button>' +
+        '<span class="edit-hint">אפשר לערוך לפני ההעתקה — העריכות נשמרות אצלכם בדפדפן</span>' +
+      '</div>';
+  }
+
+  function openAppModal(track, app, idx){
+    modalTitle.textContent = app.title;
+    modalAssess.textContent = 'מה היא בודקת: ' + app.assesses;
+
+    const baseKey = 'hpvc:' + track.id + ':' + idx;
+    const recoTool = app.tool === 'aistudio' ? 'Google AI Studio' : 'Gemini Canvas';
+
+    let html = '';
+    // recommendation
+    html +=
+      '<div class="reco">' + ICON_CHECK.replace('aria-hidden="true"','aria-hidden="true"') +
+        '<div><b>כלי מומלץ: ' + escapeHtml(recoTool) + '.</b> ' + escapeHtml(app.toolWhy || '') + '</div>' +
+      '</div>';
+
+    // default (Canvas / self-assessment) prompt
+    html += promptBlock('הפרומפט לבנייה (הערכה עצמית — להדבקה ב-Gemini Canvas):', app.prompt, baseKey + ':canvas');
+
+    // advanced (AI Studio + Firebase) toggle
+    if(app.advancedPrompt){
+      uid++;
+      const advId = 'adv-' + uid;
+      html +=
+        '<div class="adv">' +
+          '<button type="button" class="adv-toggle" aria-expanded="false" aria-controls="' + advId + '">' +
+            '<span class="ttl">גרסה מתקדמת — איסוף תוצאות במקום אחד' +
+              '<small>עם Google AI Studio + Firebase: הסטודנטים מתחברים, ואתם רואים את כל ההגשות</small>' +
+            '</span>' + ICON_CHEV +
+          '</button>' +
+          '<div class="adv-body" id="' + advId + '" hidden>' +
+            '<div class="adv-note"><b>שימו לב:</b> דורש חשבון Google, ובדקו שכללי-ההרשאה שנוצרו מונעים מסטודנט לראות תשובות של אחר. בחינם — עד 2 אפליקציות פעילות.</div>' +
+            promptBlock('הפרומפט לבנייה (איסוף מרכזי — להדבקה ב-Google AI Studio):', app.advancedPrompt, baseKey + ':advanced') +
+          '</div>' +
+        '</div>';
+    }
+
+    // tool links
+    html +=
+      '<div class="tool-links">' +
+        '<a class="tool-link" href="https://gemini.google.com/" target="_blank" rel="noopener">פתיחת Gemini Canvas ' + ICON_EXT + '</a>' +
+        '<a class="tool-link" href="https://aistudio.google.com/" target="_blank" rel="noopener">פתיחת Google AI Studio ' + ICON_EXT + '</a>' +
+      '</div>';
+
+    // next steps
+    html +=
+      '<div class="next-steps">' +
+        '<span class="glabel">איך ממשיכים מכאן?</span>' +
+        '<ol>' +
+          '<li>מלאו את הפרטים בסוגריים <span class="latin">[...]</span> ועדכנו לפי הקורס שלכם.</li>' +
+          '<li>לחצו "העתקת הפרומפט", פתחו את הכלי והדביקו.</li>' +
+          '<li>קיבלתם אפליקציה? דייקו אותה בשיחה ("הוסף...", "שנה...").</li>' +
+          '<li>שתפו את הקישור עם הסטודנטים — ובהערכה עצמית, בקשו מהם להגיש את "הסיכום" שהאפליקציה מייצרת.</li>' +
+        '</ol>' +
+      '</div>';
+
+    modalBody.innerHTML = html;
+
+    // auto-size visible textareas + persist edits
+    modalBody.querySelectorAll('.prompt-input').forEach(ta => {
+      autoGrow(ta);
+      ta.addEventListener('input', () => {
+        autoGrow(ta);
+        const key = taStoreKey[ta.id];
+        if(key) lsSet(key, ta.value);
+      });
+    });
+
+    modal.showModal();
+    modalBody.scrollTop = 0;
+    modalClose.focus();
+  }
+
+  function autoGrow(ta){ ta.style.height = 'auto'; ta.style.height = (ta.scrollHeight + 2) + 'px'; }
+
+  modalClose.addEventListener('click', () => modal.close());
+  modal.addEventListener('click', (e) => { if(e.target === modal) modal.close(); });
+
+  /* ===== Modal interactions: copy / reset / advanced toggle ===== */
+  modalBody.addEventListener('click', (e) => {
+    const copyBtn = e.target.closest('.btn-copy');
+    if(copyBtn){
+      const ta = document.getElementById(copyBtn.dataset.target);
+      if(ta) copyText(ta.value, ta).then(ok => { if(ok) flashCopied(copyBtn); });
+      return;
+    }
+    const resetBtn = e.target.closest('.reset-link');
+    if(resetBtn){
+      const ta = document.getElementById(resetBtn.dataset.reset);
+      if(ta){
+        ta.value = taOriginal[ta.id] || '';
+        const key = taStoreKey[ta.id];
+        if(key) lsDel(key);
+        autoGrow(ta);
+        showToast('הטקסט שוחזר למקור');
+      }
+      return;
+    }
+    const advBtn = e.target.closest('.adv-toggle');
+    if(advBtn){
+      const body = document.getElementById(advBtn.getAttribute('aria-controls'));
+      const open = advBtn.getAttribute('aria-expanded') === 'true';
+      advBtn.setAttribute('aria-expanded', String(!open));
+      if(body){
+        body.hidden = open;
+        if(!open){ body.querySelectorAll('.prompt-input').forEach(ta => autoGrow(ta)); }
+      }
+      return;
+    }
+  });
+
+  /* ===== Copy ===== */
+  const toast = document.getElementById('toast');
+  let toastTimer = null;
+
+  async function copyText(text, ta){
+    try{
+      await navigator.clipboard.writeText(text);
+      return true;
+    }catch(err){
+      try{
+        ta.focus(); ta.select();
+        const ok = document.execCommand('copy');
+        window.getSelection().removeAllRanges();
+        return ok;
+      }catch(e2){ return false; }
+    }
+  }
+
+  function flashCopied(btn){
+    const labelEl = btn.querySelector('.btn-label');
+    const original = labelEl.textContent;
+    btn.classList.add('copied');
+    btn.querySelector('svg').outerHTML = ICON_CHECK;
+    labelEl.textContent = 'הועתק!';
+    showToast('הפרומפט הועתק ללוח');
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      const svg = btn.querySelector('svg');
+      if(svg) svg.outerHTML = ICON_COPY;
+      labelEl.textContent = original;
+    }, 2000);
+  }
+
+  function showToast(msg){
+    toast.innerHTML = ICON_CHECK + '<span>' + escapeHtml(msg) + '</span>';
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  /* ===== Init ===== */
+  renderTrackCards();
+  handleRoute();
+  </script>
+</body>
+</html>
