@@ -327,6 +327,48 @@
     .toast.show{opacity:1;transform:translateY(0);}
     .toast svg{width:1.2em;height:1.2em;color:#6FE0A0;}
 
+    /* ===== Resources bar ===== */
+    .resources{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.6rem;}
+    .res-chip{display:inline-flex;align-items:center;gap:.5ch;text-decoration:none;font-weight:700;font-size:.95rem;
+      border-radius:999px;padding:.6rem 1.1rem;min-height:44px;border:1.5px solid var(--line);
+      color:var(--teal-700);background:var(--surface);box-shadow:var(--shadow-sm);
+      transition:background .15s ease,border-color .15s ease,transform .12s ease;}
+    .res-chip:hover{background:var(--cream-2);border-color:#D9CDB6;transform:translateY(-2px);}
+    .res-chip svg{width:1.05em;height:1.05em;flex:none;}
+    .res-chip.primary{background:var(--coral);color:#fff;border-color:var(--coral);}
+    .res-chip.primary:hover{background:var(--coral-700);border-color:var(--coral-700);}
+
+    /* ===== Gallery ===== */
+    .gallery{margin-top:3.2rem;}
+    .gallery-card-wrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+      box-shadow:var(--shadow-sm);padding:clamp(1.3rem,3vw,2rem);}
+    .gallery-form{display:grid;gap:.85rem;grid-template-columns:1fr 1fr auto;align-items:end;}
+    .gallery-form .field{display:flex;flex-direction:column;gap:.35rem;min-width:0;}
+    .gallery-form label{font-weight:700;color:var(--teal-700);font-size:.92rem;}
+    .gallery-form input{font-family:inherit;font-size:1rem;color:var(--ink);background:var(--cream);
+      border:1.5px solid var(--line);border-radius:10px;padding:.7rem .9rem;min-height:46px;direction:rtl;width:100%;}
+    .gallery-form input:focus{border-color:var(--teal);background:#fff;}
+    .gallery-form input[type=url]{direction:ltr;text-align:left;}
+    .submit-btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;cursor:pointer;
+      background:var(--teal);color:#fff;font-weight:700;font-size:1rem;border:none;border-radius:10px;
+      padding:.7rem 1.4rem;min-height:46px;transition:background .15s ease,transform .1s ease;}
+    .submit-btn:hover{background:var(--teal-700);}
+    .submit-btn:active{transform:scale(.97);}
+    .submit-btn:disabled{background:#9DBEBC;cursor:not-allowed;}
+    .gallery-note{margin-top:.85rem;font-size:.9rem;color:var(--ink-soft);}
+    .gallery-status{margin-top:1rem;padding:.85rem 1.1rem;border-radius:10px;font-size:.95rem;font-weight:600;}
+    .gallery-status.info{background:var(--teal-50);border:1px solid #D2E4E3;color:var(--teal-700);}
+    .gallery-status.err{background:#FBEFE9;border:1px solid #F0D7CB;color:var(--coral-700);}
+    .gallery-grid{margin-top:1.6rem;display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
+    .g-item{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm);
+      padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.5rem;}
+    .g-item .g-name{font-weight:800;color:var(--ink);}
+    .g-item .g-link{color:var(--teal);text-decoration:none;font-weight:700;word-break:break-all;direction:ltr;
+      display:inline-flex;align-items:center;gap:.4ch;}
+    .g-item .g-link:hover{text-decoration:underline;}
+    .gallery-empty{color:var(--ink-soft);margin-top:1.4rem;text-align:center;padding:1.5rem;}
+    @media (max-width:620px){ .gallery-form{grid-template-columns:1fr;} }
+
     /* ===== Responsive ===== */
     @media (max-width:768px){
       body{font-size:17px;}
@@ -373,12 +415,51 @@
           </ol>
         </section>
 
+        <nav class="resources" aria-label="משאבים">
+          <a class="res-chip" href="https://tomhagiladi.github.io/google-ai-studio-vibe-coding/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            מדריך מלא ל-<span class="latin">Google AI Studio</span>
+          </a>
+          <a class="res-chip" href="rubric.html" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/><path d="m9 14 2 2 4-4"/></svg>
+            מחוון להערכת האפליקציה
+          </a>
+          <a class="res-chip primary" href="#gallery">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            גלריית האפליקציות שלנו
+          </a>
+        </nav>
+
         <section class="menu" aria-labelledby="tracks-heading">
           <div class="section-head">
             <h2 id="tracks-heading">בחרו את תחום הדעת שלכם</h2>
             <p class="sub">לכל מסלול הצענו 2–3 אפליקציות הערכה שמתאימות לסוג הידע הנדרש בו, עם פרומפט מוכן לכל אחת.</p>
           </div>
           <div class="cards" id="track-cards"></div>
+        </section>
+
+        <section class="gallery" id="gallery" aria-labelledby="gallery-heading">
+          <div class="section-head">
+            <h2 id="gallery-heading">גלריית האפליקציות שלנו</h2>
+            <p class="sub">בניתם אפליקציה? הוסיפו את שמכם וקישור אליה — וראו מה כל הסגל יצר. (ודאו שהקישור פתוח לצפייה/שיתוף.)</p>
+          </div>
+          <div class="gallery-card-wrap">
+            <form class="gallery-form" id="gallery-form">
+              <div class="field">
+                <label for="g-name">השם שלכם (ואפשר גם הקורס)</label>
+                <input id="g-name" name="name" type="text" maxlength="80" required placeholder="למשל: רותי כהן · יסודות הסיעוד">
+              </div>
+              <div class="field">
+                <label for="g-url">קישור לאפליקציה</label>
+                <input id="g-url" name="url" type="url" maxlength="500" required placeholder="https://...">
+              </div>
+              <button class="submit-btn" type="submit" id="g-submit">הוספה לגלריה</button>
+            </form>
+            <p class="gallery-note">הקישור הוא לאפליקציה שבניתם ב-<span class="latin">Gemini Canvas</span> או <span class="latin">Google AI Studio</span> (כפתור השיתוף / כתובת ה-<span class="latin">deploy</span>).</p>
+            <div class="gallery-status" id="gallery-status" hidden></div>
+          </div>
+          <div class="gallery-grid" id="gallery-grid" aria-live="polite"></div>
+          <p class="gallery-empty" id="gallery-empty" hidden>עדיין אין אפליקציות בגלריה — היו הראשונים!</p>
         </section>
 
         <section class="guidance-section" aria-labelledby="guide-heading">
@@ -989,6 +1070,78 @@
   /* ===== Init ===== */
   renderTrackCards();
   handleRoute();
+  </script>
+
+  <!-- ===== Live gallery (Firebase Firestore) ===== -->
+  <script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp }
+    from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+  /* ===__FIREBASE_CONFIG_START__=== */
+  const FIREBASE_CONFIG = {
+    apiKey: "REPLACE_ME",
+    authDomain: "REPLACE_ME",
+    projectId: "REPLACE_ME",
+    storageBucket: "REPLACE_ME",
+    messagingSenderId: "REPLACE_ME",
+    appId: "REPLACE_ME"
+  };
+  /* ===__FIREBASE_CONFIG_END__=== */
+
+  const form = document.getElementById('gallery-form');
+  const statusEl = document.getElementById('gallery-status');
+  const grid = document.getElementById('gallery-grid');
+  const emptyEl = document.getElementById('gallery-empty');
+  const submitBtn = document.getElementById('g-submit');
+  const nameEl = document.getElementById('g-name');
+  const urlEl = document.getElementById('g-url');
+
+  function setStatus(msg, kind){ statusEl.textContent = msg; statusEl.className = 'gallery-status ' + (kind||'info'); statusEl.hidden = false; }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function safeUrl(u){ try{ const x = new URL(u); return (x.protocol==='https:'||x.protocol==='http:') ? x.href : null; }catch(e){ return null; } }
+
+  if(FIREBASE_CONFIG.apiKey === 'REPLACE_ME'){
+    // Not connected yet — show a friendly placeholder, disable the form.
+    setStatus('הגלריה תופעל בקרוב מאוד (בהמתנה לחיבור מסד הנתונים). אפשר כבר לבנות אפליקציות!', 'info');
+    submitBtn.disabled = true; nameEl.disabled = true; urlEl.disabled = true;
+  } else {
+    try{
+      const app = initializeApp(FIREBASE_CONFIG);
+      const db = getFirestore(app);
+      const col = collection(db, 'submissions');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = nameEl.value.trim();
+        const url = safeUrl(urlEl.value.trim());
+        if(!name){ setStatus('נא למלא שם.', 'err'); return; }
+        if(!url){ setStatus('הקישור לא תקין — ודאו שהוא מתחיל ב-https://', 'err'); return; }
+        submitBtn.disabled = true;
+        try{
+          await addDoc(col, { name: name.slice(0,80), url: url.slice(0,500), createdAt: serverTimestamp() });
+          form.reset();
+          setStatus('נוסף לגלריה! 🙌', 'info');
+        }catch(err){
+          setStatus('אופס, ההוספה נכשלה. נסו שוב בעוד רגע.', 'err');
+        }finally{ submitBtn.disabled = false; }
+      });
+
+      onSnapshot(query(col, orderBy('createdAt','desc')), (snap) => {
+        const items = [];
+        snap.forEach(d => items.push(d.data()));
+        if(!items.length){ grid.innerHTML = ''; emptyEl.hidden = false; return; }
+        emptyEl.hidden = true;
+        grid.innerHTML = items.map(d => {
+          const u = safeUrl(d.url) || '#';
+          return '<div class="g-item"><span class="g-name">' + esc(d.name) + '</span>' +
+                 '<a class="g-link" href="' + esc(u) + '" target="_blank" rel="noopener">פתיחת האפליקציה ↗</a></div>';
+        }).join('');
+      }, () => setStatus('לא ניתן לטעון את הגלריה כרגע.', 'err'));
+    }catch(err){
+      setStatus('שגיאה בחיבור לגלריה.', 'err');
+    }
+  }
   </script>
 </body>
 </html>
